@@ -993,17 +993,8 @@ namespace Unnamed
 
         public void SetPersonalityTraits()
         {
-            CharTraits.Add(new StatData("Sanity", Stat("WIS") /15+r.Next(0,4)));//0
-            CharTraits.Add(new StatData("Lawfulness",  r.Next(2, 7) - Stat("DEX") / 20));//1
+            CharTraits.Add(new StatData("Lawfulness",  r.Next(2, 7) - Stat("DEX") / 8));//1
             CharTraits.Add(new StatData("Kindness", r.Next(0,7)));//2
-            CharTraits.Add(new StatData("Temper", Stat("WIS") / 15 + r.Next(0, 4)));//3
-            CharTraits.Add(new StatData("Openness", r.Next(0, 7)));//4
-            CharTraits.Add(new StatData("Friendliness", Stat("WIS") / 15 + r.Next(0, 4)));//5
-            CharTraits.Add(new StatData("Easygoingness", r.Next(0, 7)));//6
-            CharTraits.Add(new StatData("Honesty", r.Next(0, 7)));//7
-            CharTraits.Add(new StatData("Humor sense", r.Next(0, 7)));//8
-            CharTraits.Add(new StatData("Self-esteem", r.Next(0, 7)));//9
-            CharTraits.Add(new StatData("Perfectionism", r.Next(2, 7) - Stat("WIS") / 20));//10
         }
 
         public void SetCharBio()
@@ -1452,7 +1443,7 @@ namespace Unnamed
                     else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
                     {
                         Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
-                        MoveList.Add(new Move("Wild Staff", "DEX\nStave\ncMP -4\ncSP -10\ntHP -14\nPlant"));
+                        MoveList.Add(Move.Find("Vine Staff"));
                     }
                     switch(r.Next(0,5))
                     {
@@ -1477,9 +1468,9 @@ namespace Unnamed
                             if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Web"));
                             break;
                         case 4:
-                            if (Stat("ForceOfNature") >= 20) MoveList.Add(new Move("Poison Spores", "INT\nForceOfNature\ncMP -15\ntHP -5\ntSP -10\nPoison"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(new Move("Create Mushroom", "WIS\nForceOfNature\ncMP -5\ncWP -5\nSummon Mushroom"));
-                            if (Stat("ForceOfNature") >= 40) MoveList.Add(new Move("Pheromone Spores", "INT\nForceOfNature\ncMP -15\ntSP -5\ntWP -10\nPoison"));
+                            if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Poison Spores"));
+                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Create Mushroom"));
+                            if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Pheromone Spores"));
                             break;
                         default: break; //+ roots/vines, snakes, butterfly
                     }
@@ -1630,7 +1621,7 @@ namespace Unnamed
                             MoveList.Add(Move.Find("Small Heal"));
                             break;
                         case "ForceOfNature":
-                            MoveList.Add(new Move("Wild Fury", "END\nForceOfNature\ncHP -10\ncSP +15"));
+                            MoveList.Add(Move.Find("Wild Fury"));
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case "Entropy":
@@ -1655,30 +1646,30 @@ namespace Unnamed
                     }
                     else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
                     {
-                        MoveList.Add(new Move("Void Punch", "STR\nBrawl\ncSP -5\ncMP -5\ncHP -5\ntHP -15\nVoid"));
-                        MoveList.Add(new Move("Draining Claws", "STR\nBrawl\ncSP -8\ncMP -2\ntHP -5\nDrain\nVoid"));
+                        MoveList.Add(Move.Find("Void Punch"));
+                        MoveList.Add(Move.Find("Draining Claws"));
                     }
                     else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
                     {
                         Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
                     }
-                    if (Stat("Entropy") >= 25) MoveList.Add(new Move("Life Tap", "INT\nEntropy\ncHP -10\ncMP +10\nVoid"));
+                    if (Stat("Entropy") >= 25) MoveList.Add(Move.Find("Life Tap"));
                     if (Stat("Entropy") >= 50)
                         switch(r.Next(0,3))
                         {
                             case 0:
-                                MoveList.Add(new Move("Ghost call", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Ghost"));
+                                MoveList.Add(Move.Find("Ghost call"));
                                 break;
                             case 1:
-                                MoveList.Add(new Move("Raise Skeleton", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Skeleton"));
+                                MoveList.Add(Move.Find("Raise Skeleton"));
                                 break;
                             case 2:
-                                MoveList.Add(new Move("Raise Zombie", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Zombie"));
+                                MoveList.Add(Move.Find("Raise Zombie"));
                                 break;
                             default: break;
                         }
-                    MoveList.Add(new Move("Shadow Blast", "INT\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"));
-                    MoveList.Add(new Move("Drain Life", "INT\nEntropy\ncMP -10\ntHP -5\nDrain\nVoid"));
+                    MoveList.Add(Move.Find("Shadow Blast"));
+                    MoveList.Add(Move.Find("Drain Life"));
                     break;
                 case "Whisperer":
                 case "Psionic":
@@ -1693,16 +1684,16 @@ namespace Unnamed
                     }
                     else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
                     {
-                        MoveList.Add(new Move("Will Smash", "STR\nBrawl\ncSP -8\ncWP -4\ntWP -6\ntHP -6\nPsy"));
+                        MoveList.Add(Move.Find("Will Smash"));
                     }
                     else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
                     {
                         Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
                     }
                     MoveList.Add(Move.Find("Psy Blast"));
-                    if (Stat("Psionics") >= 30 && r.Next(0,2)==0) MoveList.Add(new Move("Paralyse", "WIS\nPsionics\ncMP -10\ntWP -4\ntSP -6\nPsy"));
+                    if (Stat("Psionics") >= 30 && r.Next(0,2)==0) MoveList.Add(Move.Find("Paralyse"));
                     if (Stat("Psionics") >= 40) MoveList.Add(Move.Find("Will Break"));
-                    if (Stat("Psionics") >= 50) MoveList.Add(new Move("Psy Storm", "WIS\nPsionics\ncMP -18\ntaWP -6\nPsy"));
+                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Psy Storm"));
                     break;
                 case "Sniper":
                 case "Witch Hunter":
@@ -1744,7 +1735,7 @@ namespace Unnamed
                             MoveList.Add(Move.Find("Spark"));
                             break;
                         case "Hydrosophist":
-                            MoveList.Add(new Move("Ice Shard", "INT\nHydrosophist\ncMP -15\ntHP -8\ntSP -9\nIce"));
+                            MoveList.Add(Move.Find("Ice Shard"));
                             break;
                         case "Geomagnetic":
                             MoveList.Add(Move.Find("Rock Throw"));
@@ -1757,7 +1748,7 @@ namespace Unnamed
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case "Entropy":
-                            MoveList.Add(new Move("Shadow Blast", "INT\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"));
+                            MoveList.Add(Move.Find("Shadow Blast"));
                             break;
                         case "Psionics":
                             MoveList.Add(Move.Find("Psy Blast"));
@@ -1782,7 +1773,7 @@ namespace Unnamed
                             MoveList.Add(Move.Find("Spark"));
                             break;
                         case "Hydrosophist":
-                            MoveList.Add(new Move("Ice Dagger", "DEX\nShortBlade\ncSP -5\ncMP -8\ntHP -5\ntSP -8\nIce"));
+                            MoveList.Add(Move.Find("Ice Dagger"));
                             MoveList.Add(Move.Find("Ice Shard"));
                             break;
                         case "Geomagnetic":
@@ -1832,7 +1823,7 @@ namespace Unnamed
                         case "Hydrosophist":
                             if (Stat("Stave") > Stat("Brawl"))
                             {
-                                MoveList.Add(new Move("Ice Staff", "DEX\nStave\ncSP -10\ncMP -4\ntHP -7\ntSP -7\nIce"));
+                                MoveList.Add(Move.Find("Ice Staff"));
                             }
                             else
                             {
@@ -1843,7 +1834,7 @@ namespace Unnamed
                         case "Geomagnetic":
                             if (Stat("Stave") > Stat("Brawl"))
                             {
-                                MoveList.Add(new Move("Rock Staff", "DEX\nStave\ncSP -10\ncMP -4\ntHP -10\ntSP -4\nRock"));
+                                MoveList.Add(Move.Find("Rock Staff"));
                             }
                             else
                             {
@@ -1861,26 +1852,26 @@ namespace Unnamed
                         case "ForceOfNature":
                             if (Stat("Stave") < Stat("Brawl"))
                             {
-                                MoveList.Add(new Move("Wild Punch", "STR\nBrawl\ncSP -6\ncMP -6\ntHP -8\ntSP -4"));
+                                MoveList.Add(Move.Find("Bestial Punch"));
                             }
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case "Entropy":
                             if (Stat("Stave") < Stat("Brawl"))
                             {
-                                MoveList.Add(new Move("Entropic Punch", "STR\nBrawl\ncSP -5\ncMP -5\ncHP -5\ntHP -15\nVoid"));
-                                MoveList.Add(new Move("Draining Punch", "STR\nBrawl\ncSP -5\ncMP -5\ntHP -5\nDrain\nVoid"));
+                                MoveList.Add(Move.Find("Entropic Punch"));
+                                MoveList.Add(Move.Find("Draining Punch"));
                             }
-                            MoveList.Add(new Move("Shadow Blast", "WILL\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"));
+                            MoveList.Add(Move.Find("Shadow Blast"));
                             break;
                         case "Psionics":
                             if (Stat("Stave") > Stat("Brawl"))
                             {
-                                MoveList.Add(new Move("Psionic Staff", "DEX\nStave\ncWP -5\ncSP -10\ntSP -5\ntWP -10\nPsy"));
+                                MoveList.Add(Move.Find("Psionic Staff"));
                             }
                             else
                             {
-                                MoveList.Add(new Move("Will Smash", "STR\nBrawl\ncSP -8\ncWP -4\ntWP -6\ntHP -6\nPsy"));
+                                MoveList.Add(Move.Find("Will Smash"));
                             }
                             if (Stat("Psionics") >= 30) MoveList.Add(Move.Find("Will Break"));
                             MoveList.Add(Move.Find("Psy Blast"));
@@ -1898,36 +1889,36 @@ namespace Unnamed
                     switch (TrapperMagicSortedList[0].Name)
                     {
                         case "Pyrokinetic":
-                            MoveList.Add(new Move("Fire Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntHP -10\ntWP -5\nFire"));
+                            MoveList.Add(Move.Find("Fire Whip"));
                             MoveList.Add(Move.Find("Fire Blast"));
                             break;
                         case "Aerotheurge":
-                            MoveList.Add(new Move("Storm Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntSP -7\ntMP -5\ntWP -3\nStorm"));
+                            MoveList.Add(Move.Find("Storm Whip"));
                             MoveList.Add(Move.Find("Spark"));
                             break;
                         case "Hydrosophist":
-                            if (r.Next(0, 2) == 0) MoveList.Add(new Move("Water Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntSP -10\ntWP -5\nWater"));
-                            else MoveList.Add(new Move("Ice Whip", "DEX\nWhip\ncSP -13\ncMP -5\ntSP -16\ntWP -2\nIce"));
+                            if (r.Next(0, 2) == 0) MoveList.Add(Move.Find("Water Whip"));
+                            else MoveList.Add(Move.Find("Ice Whip"));
                             MoveList.Add(Move.Find("Ice Shard"));
                             break;
                         case "Geomagnetic":
-                            MoveList.Add(new Move("Rock Whip", "DEX\nWhip\ncSP -10\ncMP -10\ntSP -10\ntHP -5\ntWP -5\nRock"));
+                            MoveList.Add(Move.Find("Rock Whip"));
                             MoveList.Add(Move.Find("Rock Throw"));
                             break;
                         case "PowerOfLight":
-                            MoveList.Add(new Move("Holy Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntHP -5\ntSP -10\nLight"));
+                            MoveList.Add(Move.Find("Holy Whip"));
                             MoveList.Add(Move.Find("Dazzling Light"));
                             MoveList.Add(Move.Find("Small Heal"));
                             break;
                         case "ForceOfNature":
-                            MoveList.Add(new Move("Vine Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntSP -10\ntWP -5\nPlant"));
+                            MoveList.Add(Move.Find("Vine Whip"));
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case "Entropy":
-                            MoveList.Add(new Move("Shadow Blast", "INT\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"));
+                            MoveList.Add(Move.Find("Shadow Blast"));
                             break;
                         case "Psionics":
-                            MoveList.Add(new Move("Psy Whip", "WIS\nWhip\ncSP -15\ncWP -10\ntWP -20\ntHP -5\nPsy"));
+                            MoveList.Add(Move.Find("Psy Whip"));
                             if (Stat("Psionics") >= 30) MoveList.Add(Move.Find("Will Break"));
                             MoveList.Add(Move.Find("Psy Blast"));
                             break;
@@ -1982,7 +1973,7 @@ namespace Unnamed
                             MoveList.Add(Move.Find("Rock Throw"));
                             break;
                         case "Entropy":
-                            MoveList.Add(new Move("Shadow Blast", "INT\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"));
+                            MoveList.Add(Move.Find("Shadow Blast"));
                             break;
                         case "Psionics":
                             if (Stat("ShortBlade") >= 20) MoveList.Add(Move.Find("Psy Blade"));
@@ -1996,12 +1987,12 @@ namespace Unnamed
                     if (Stat("Persuasion") > Stat("Performance"))
                     {
                         Subclass = "Mediator";
-                        MoveList.Add(new Move("Distracting talk", "CHR\nPersuasion\ncSP -10\ntSP -10"));
-                        MoveList.Add(new Move("Seducting speech", "CHR\nPersuasion\ncSP -10\ntWP -10"));
-                        MoveList.Add(new Move("Battle cry", "CHR\nPersuasion\ncSP -20\ncWP -6\ncaWP +4\ncaWP +4"));
+                        MoveList.Add(Move.Find("Distracting talk"));
+                        MoveList.Add(Move.Find("Seducting speech"));
+                        MoveList.Add(Move.Find("Battle cry"));
                     } else
                     {
-                        if (r.Next(0, 2) == 0 || Stat("DEX") < 45)
+                        if (r.Next(0, 2) == 0 || Stat("DEX") < 10)
                         {
                             Subclass = "Musician";
                             List<Item> musicians = new List<Item>
@@ -2019,37 +2010,37 @@ namespace Unnamed
                         else
                         {
                             Subclass = "Dancer";
-                            MoveList.Add(new Move("Flirtatious Wink", "CHR\nPerformance\ncSP -5\ntWP -4\nPsy"));
-                            MoveList.Add(new Move("Luring Dance", "CHR\nPersuasion\ncSP -12\ntWP -5\ntSP -5\nPsy"));
-                            if (Stat("Acrobatics") >= 40) MoveList.Add(new Move("Out With a Bang", "DEX\nAcrobatics\ncSP -10\ntHP -4\ntSP -6"));
+                            MoveList.Add(Move.Find("Flirtatious Wink"));
+                            MoveList.Add(Move.Find("Luring Dance"));
+                            if (Stat("DEX") >= 16) MoveList.Add(Move.Find("Out With a Bang"));
                             List<StatData> BardDanceList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
                             List<StatData> BardDanceSortedList = BardDanceList.OrderByDescending(o => o.Value).ToList();
                             if (BardDanceSortedList[0].Value >= 35)
                                 switch (BardDanceSortedList[0].Name)
                                 {
                                     case "Pyrokinetic":
-                                        MoveList.Add(new Move("Dancing Flames", "CHR\nPyrokinetics\ncSP -15\ntaHP -1\ntaWP -2\ntHP -2\nFire"));
+                                        MoveList.Add(Move.Find("Dancing Flames"));
                                         break;
                                     case "Aerotheurge":
-                                        MoveList.Add(new Move("Sparkling Dance", "CHR\nAerotheurge\ncMP -2\ntSP -4\ntaMP -1\ntaHP -1\nStorm"));
+                                        MoveList.Add(Move.Find("Sparkling Dance"));
                                         break;
                                     case "Hydrosophist":
-                                        MoveList.Add(new Move("Frosty Dance", "CHR\nHydrosophist\ncMP -2\ntSP -5\ntaSP -1\nIce"));
+                                        MoveList.Add(Move.Find("Frosty Dance"));
                                         break;
                                     case "Geomagnetic":
-                                        MoveList.Add(new Move("Dancing earth", "CHR\nGeomagnetic\ncMP -5\ncSP -8\ntaSP -4\nEarth"));
+                                        MoveList.Add(Move.Find("Dancing earth"));
                                         break;
                                     case "PowerOfLight":
-                                        MoveList.Add(new Move("Dancing Lights", "CHR\nPowerOfLight\ncSP -10\ncMP-3\ncaHP +2\ntaSP -2\nLight"));
+                                        MoveList.Add(Move.Find("Dancing Lights"));
                                         break;
                                     case "ForceOfNature":
-                                        MoveList.Add(new Move("Dancing roots", "CHR\nForceOfNature\ncMP -15\ntaHP -1\ntaSP -4\nPlant"));
+                                        MoveList.Add(Move.Find("Dancing roots"));
                                         break;
                                     case "Entropy":
-                                        MoveList.Add(new Move("Draining Bachata", "CHR\nEntropy\ncSP -15\ncMP -5\ntHP -4\ntWP -4\ntSP -4\nDrain\nVoid"));
+                                        MoveList.Add(Move.Find("Draining Bachata"));
                                         break;
                                     case "Psionics":
-                                        MoveList.Add(new Move("Flamenco", "CHR\nPerformance\ncSP -15\ntWP -5\ntaWP -3\nPsy"));
+                                        MoveList.Add(Move.Find("Flamenco"));
                                         break;
                                     default: break;
                                 }
@@ -2191,7 +2182,7 @@ namespace Unnamed
                         break;
                     case "PowerOfLight":
                         Class = "Priest";
-                        if ((Stat("STR") + Stat("END")) / 2 >= 30) Class = "Paladin";
+                        if ((Stat("STR") + Stat("END")) / 2 >= 10) Class = "Paladin";
                         break;
                     case "ForceOfNature":
                         Class = "Druid";
@@ -2201,7 +2192,7 @@ namespace Unnamed
                     case "BluntWeapon":
                     case "Axe":
                         Class = "Warrior";
-                        if (Stat("INT") < 25) Class = "Barbarian";
+                        if (Stat("INT") < 10) Class = "Barbarian";
                         break;
                     case "Entropy":
                         Class = "Warlock";

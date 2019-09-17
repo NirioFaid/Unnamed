@@ -59,21 +59,21 @@ namespace Unnamed
             new Move("Explosion", "INT\nPyrokinetic\ncMP -30\ntaHP -10\nFire"),
 
             new Move("Static Punch", "STR\nBrawl\ncSP -5\ncMP -7\ntHP -8\ntMP -4\nStorm"),
-            new Move("Spark", "INT\nAerotheurge\ncMP -12\ntHP -8\ntMP -4\nStorm"),
+            new Move("Spark", "INT\nAerotheurge\ncMP -12\ntHP -6\ntMP -6\nStorm"),
             new Move("Windfury", "INT\nAerotheurge\ncMP -5\ncWP -5\ncSP +15\nStorm"),
             new Move("Tailwind", "INT\nAerotheurge\ncMP -25\ncWP -20\ncaSP +5\ntaSP -5\nStorm"),
 
             new Move("Restoration", "WIS\nHydrosophist\ncMP -10\ncHP +10\nWater"),
             new Move("Mana Flow", "WIS\nHydrosophist\ncWP -10\ncMP +10\nWater"),
-            new Move("Water Punch", "STR\nBrawl\ncSP -5\ncMP -5\ntHP -5\ntSP -5\nWater"),
+            new Move("Water Punch", "STR\nBrawl\ncSP -5\ncMP -4\ntHP -3\ntSP -3\ntWP -3\nWater"),
             new Move("Ice Dagger", "DEX\nShortBlade\ncSP -5\ncMP -5\ntHP -6\ntSP -4\nIce"),
-            new Move("Ice Shard", "INT\nHydrosophist\ncMP -15\ntHP -8\ntSP -7\nIce"),
-            new Move("Steam Lance", "INT\nHydrosophist\ncMP -14\ntHP -10\ntSP -4\nWater"),
-            new Move("Deep Freeze", "INT\nHydrosophist\ncMP -28\ntHP -8\ntSP -20\nIce"),
-            new Move("Blizzard", "INT\nHydrosophist\ncMP -39\ntaSP -13\nIce"),
+            new Move("Ice Shard", "INT\nHydrosophist\ncMP -12\ntHP -6\ntSP -6\nIce"),
+            new Move("Steam Lance", "INT\nHydrosophist\ncMP -12\ntHP -6\ntSP -3\ntWP -3\nWater"),
+            new Move("Deep Freeze", "INT\nHydrosophist\ncMP -12\ntHP -2\ntSP -10\nIce"),
+            new Move("Blizzard", "INT\nHydrosophist\ncMP -30\ntaSP -10\nIce"),
 
             new Move("Earth Punch", "STR\nBrawl\ncSP -5\ncMP -8\ntHP -8\ntSP -5\nEarth"),
-            new Move("Rock Dagger", "DEX\nShortBlade\ncSP -5\ncMP -8\ntHP -8\ntSP -5\nRock"),
+            new Move("Rock Dagger", "DEX\nShortBlade\ncSP -5\ncMP -4\ntHP -7\ntSP -2\nRock"),
             new Move("Rock Throw", "INT\nGeomagnetic\ncMP -12\ntHP -8\ntSP -4\nRock"),
             new Move("Earth Strike", "INT\nGeomagnetic\ncMP -12\ntHP -7\ntSP -5\nEarth"),
             new Move("Impalement", "INT\nGeomagnetic\ncMP -24\ntaHP -5\ntaSP -3\nRock"),
@@ -115,11 +115,15 @@ namespace Unnamed
             new Move("Void Punch", "STR\nBrawl\ncSP -5\ncMP -5\ncHP -5\ntHP -15\nVoid"),
             new Move("Draining Claws", "STR\nBrawl\ncSP -8\ncMP -2\ntHP -5\nDrain\nVoid"),
             new Move("Life Tap", "INT\nEntropy\ncHP -10\ncMP +10\nVoid"),
+
             new Move("Ghost call", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Ghost"),
             new Move("Raise Skeleton", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Skeleton"),
             new Move("Raise Zombie", "INT\nEntropy\ncWP -5\ntHP -10\ncMP -15\ntWP -5\nSummon Zombie"),
+
             new Move("Shadow Blast", "INT\nEntropy\ncMP -10\ncHP -5\ntHP -15\nVoid"),
             new Move("Drain Life", "INT\nEntropy\ncMP -10\ntHP -5\nDrain\nVoid"),
+            new Move("Entropic Punch", "STR\nBrawl\ncSP -5\ncMP -5\ncHP -5\ntHP -15\nVoid"),
+            new Move("Draining Punch", "STR\nBrawl\ncSP -5\ncMP -5\ntHP -5\nDrain\nVoid"),
 
             new Move("Psy Blade", "DEX\nShortBlade\ncSP -7\ncMP -3\ncWP -5\ntHP -8\ntWP -7\nPsy"),
             new Move("Will Smash", "STR\nBrawl\ncSP -8\ncWP -4\ntWP -6\ntHP -6\nPsy"),
@@ -127,6 +131,11 @@ namespace Unnamed
             new Move("Paralyse", "WIS\nPsionics\ncMP -10\ntWP -4\ntSP -6\nPsy"),
             new Move("Will Break", "WIS\nPsionics\ncMP -10\ntWP -10\nPsy"),
             new Move("Psy Storm", "WIS\nPsionics\ncMP -18\ntaWP -6\nPsy"),
+
+            new Move("Ice Staff", "DEX\nStave\ncSP -10\ncMP -4\ntHP -7\ntSP -7\nIce"),
+            new Move("Rock Staff", "DEX\nStave\ncSP -10\ncMP -4\ntHP -10\ntSP -4\nRock"),
+            new Move("Psionic Staff", "DEX\nStave\ncWP -5\ncSP -10\ntSP -5\ntWP -10\nPsy"),
+            new Move("Vine Staff", "DEX\nStave\ncMP -4\ncSP -10\ntHP -14\nPlant"),
 
             new Move("Fire Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntHP -10\ntWP -5\nFire"),
             new Move("Storm Whip", "DEX\nWhip\ncSP -10\ncMP -5\ntSP -7\ntMP -5\ntWP -3\nStorm"),
