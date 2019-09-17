@@ -1,0 +1,129 @@
+﻿<Controls:MetroWindow
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" x:Class="Unnamed.Shop"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Shop" WindowTitleBrush="#0F0F0F" NonActiveWindowTitleBrush="#0F0F0F" Closing="MetroWindow_Closing" Foreground="Lime" TitleForeground="Lime" Height="500" Width="750">
+    <Window.Resources>
+        <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="DarkOrange"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <MenuItem Background="Black"></MenuItem>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="MenuItem">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="Lime"/>
+        </Style>
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" RadiusX="20" RadiusY="20" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type Button}" x:Key="ImageButtonStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TooltipCell" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+            <Setter Property="ToolTip" Value="{Binding Path=Description}"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="31*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" Background="#0B0B0B">
+            <DataGrid Name="itemsList" ContextMenu="{Binding Path=activeList, Mode=OneWay, ElementName=ThisControl}" SelectedCellsChanged="itemsList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="14" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn CellStyle="{StaticResource TooltipCell}" Header="Item" Width="80*" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="weight" Width="30*" Binding="{Binding Weight}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="amount" Width="30*" Binding="{Binding Stack}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="cost" Width="35*" Binding="{Binding TotalCost}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="Lime" />
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="BorderBrush" Value="Lime" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Column="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="220*"/>
+                <RowDefinition Height="25*"/>
+            </Grid.RowDefinitions>
+            <DataGrid Name="charItemsList" SelectedCellsChanged="charItemsList_SelectedCellsChanged" Grid.Row="0" Grid.Column="2" BorderBrush="Gold" BorderThickness="2" Grid.ColumnSpan="4" ContextMenu="{Binding Path=Client.Inventory, Mode=OneWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" Background="#0F0F0F" Foreground="Gold" FontSize="12" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn CellStyle="{StaticResource TooltipCell}" Header="item" Width="100*" IsReadOnly="True" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="cost" Width="30*" IsReadOnly="True" Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="weight" Width="40*" IsReadOnly="True" Binding="{Binding Weight, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="amount" Width="40*" IsReadOnly="True" Binding="{Binding Stack, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="Gold" />
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="BorderBrush" Value="Gold" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            <Button Name="sellButton" Click="sellButton_Click"  Grid.Row="2" Margin="1,1,1,1" BorderBrush="Gold" FontSize="16" Foreground="Gold" Background="Black">SELL</Button>
+        </Grid>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="220*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="25*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Controls:NumericUpDown Name="itemMult" ValueChanged="itemMult_ValueChanged" BorderThickness="0" Grid.Row="3" Grid.Column="1" Value="1" Margin="0,1,1,1" Maximum="1000" Minimum="1" TextAlignment="Left" Speedup="True" Interval="1" FontSize="20" Foreground="Lime" Background="Transparent"/>
+                <Label Grid.Row="3" Foreground="Lime" FontSize="20" Content="x" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            </Grid>
+            <ListBox Name="shopsList" SelectionChanged="shopsList_SelectionChanged" Grid.Row="0" Foreground="Lime" FontSize="16" Background="#0B0B0B">
+                <ListBoxItem Foreground="Lime" Content="Warrior Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Armor Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Assassin Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Magic Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Alchemist's Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Traveler Shop"/>
+                <ListBoxItem Foreground="Lime" Content="Black Market"/>
+            </ListBox>
+            <Label Name="unitsCounter" Grid.Row="1" Foreground="Lime" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+            <Button Name="buyButton" Click="buyButton_Click" IsEnabled="false" Grid.Row="2" Margin="1,1,1,1" BorderBrush="Lime" FontSize="16" Foreground="Lime" Background="Black">BUY</Button>
+            <Button Name="leaveButton" Click="leaveButton_Click" Grid.Row="4" Margin="1,1,1,1" BorderBrush="Red" FontSize="16" Foreground="Red" Background="Black">LEAVE</Button>
+        </Grid>
+        <Border Grid.Column="1" Grid.RowSpan="4" BorderThickness="2" BorderBrush="Lime"/>
+    </Grid>
+</Controls:MetroWindow>

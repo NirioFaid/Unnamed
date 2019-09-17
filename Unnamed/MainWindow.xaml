@@ -1,0 +1,285 @@
+﻿<Controls:MetroWindow Icon="UNNAMED.ico"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" x:Class="Unnamed.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Unnamed" TitleCaps="False" WindowTitleBrush="#0F0F0F" NonActiveWindowTitleBrush="#0F0F0F" Closing="MetroWindow_Closing" Foreground="Lime" TitleForeground="Lime" KeyDown="MetroWindow_KeyDown" Height="600" Width="800">
+    <Window.Resources>
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" RadiusX="20" RadiusY="20" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TooltipCell" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+            <Setter Property="ToolTip" Value="{Binding Path=Description}"/>
+        </Style>
+        <Style x:Key="CenterAlignCell" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MetroDataGridCell}">
+            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" x:Key="ImageButtonStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="120*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120*"/>
+                <ColumnDefinition Width="40*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1" Background="#0B0B0B">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="185*"/>
+                    <RowDefinition Height="36*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="31*"/>
+                    <RowDefinition Height="58*"/>
+                    <RowDefinition Height="58*"/>
+                </Grid.RowDefinitions>
+                <Button Style="{StaticResource ImageButtonStyle}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="0" Focusable="False" Name="profileButton" Click="profileButton_Click">
+                    <Image Name="photo" Source="{Binding Path=Avatar, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"/>
+                </Button>
+                <Path Name="pointIndicator" Visibility="Collapsed" Stretch="Fill" Width="40" Height="40" Fill="SeaGreen" VerticalAlignment="Top" StrokeThickness="2" Stroke="White" HorizontalAlignment="Right" Margin="0,4,4,0" Data="M4.1561281,2.2702953 L4.8524521,2.2702954 4.8509674,3.963097 5.8969377,3.9630803 5.8969378,5.0916036 4.8524628,5.1061913 4.8524521,6.7843885 4.1561281,6.7843887 4.1559771,5.0877741 3.1116421,5.0916036 3.1116421,3.9630803 4.1556735,3.9654722 4.1561281,2.2702953 z"/>
+                <Button Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" Content="{Binding Path=LVL, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" FontSize="28" Grid.Row="0" HorizontalAlignment="Right" Foreground="Lime" VerticalAlignment="Bottom" Focusable="False" Height="42" Width="42" BorderThickness="2" BorderBrush="Lime" Background="#0B0B0B" Name="lvlCircle" Click="profileButton_Click"/>
+
+                <Controls:MetroProgressBar Name="memEXP" Value="{Binding Path=EXP, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding Path=EXP4NextLVL, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="4,28,4,2" Foreground="Lime" Background="Transparent" BorderBrush="Lime" FontSize="16"/>
+                <TextBox Grid.Row="1" IsReadOnly="True" Foreground="Lime" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent">
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="EXP" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                            <Binding Path="EXP4NextLVL" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <Controls:MetroProgressBar Name="memMP" Value="{Binding Path=MP, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding Path=maxMP, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Margin="4,4,4,4" Foreground="MediumBlue" Background="Transparent" BorderBrush="RoyalBlue" FontSize="16"/>
+                <TextBox Grid.Row="2" IsReadOnly="True" Foreground="White" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent">
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="MP" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="maxMP" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <Controls:MetroProgressBar Name="memHP" Value="{Binding Path=HP, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding Path=maxHP, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="4,4,4,4" Foreground="DarkRed" Background="Transparent" BorderBrush="DarkRed" FontSize="16"/>
+                <TextBox Grid.Row="3" IsReadOnly="True" Foreground="White" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent">
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="HP" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                            <Binding Path="maxHP" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <Controls:MetroProgressBar Name="memSP" Value="{Binding Path=SP, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding Path=maxSP, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Margin="4,4,4,4" Foreground="ForestGreen" Background="Transparent" BorderBrush="ForestGreen" FontSize="16"/>
+                <TextBox Grid.Row="4" IsReadOnly="True" Foreground="White" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent">
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="SP" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="maxSP" Mode="OneWay"  UpdateSourceTrigger="PropertyChanged"/>
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <Controls:MetroProgressBar Name="memWP" Value="{Binding Path=WP, UpdateSourceTrigger=PropertyChanged}" Maximum="{Binding Path=maxWP, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Margin="4,4,4,4" Foreground="DarkGoldenrod" Background="Transparent" BorderBrush="DarkGoldenrod" FontSize="16"/>
+                <TextBox Grid.Row="5" IsReadOnly="True" Foreground="White" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="0" Background="Transparent">
+                    <TextBox.Text>
+                        <MultiBinding StringFormat="{}{0}/{1}">
+                            <Binding Path="WP" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                            <Binding Path="maxWP" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+                <ListBox Name="memMoves" Visibility="Collapsed" Grid.Row="6" Grid.RowSpan="3" Foreground="Lime" FontSize="16" Background="#0B0B0B">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+                       ToolTipService.ToolTip="{Binding Path=Descr, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </Grid>
+            <TabControl Name="TabCtrl" Background="Transparent" >
+                <TabItem Name="factionTab" Controls:ControlsHelper.HeaderFontSize="24" Header="{Binding Path=Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsSelected="True">
+                    <DataGrid Name="namesList" CanUserSortColumns="False" ContextMenu="{Binding Path=Crew, Mode=TwoWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" LoadingRow="namesList_LoadingRow" SelectedCellsChanged="selectedList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="16" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Width="65*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="RACE" Width="44*" Binding="{Binding Race}" />
+                            <DataGridTextColumn Header="CLASS" Width="40*" Binding="{Binding Subclass}" />
+                            <DataGridTextColumn Header="LVL" Width="14*" Binding="{Binding LVL}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="STR" Width="15*" Binding="{Binding Attributes[0].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="DEX" Width="15*" Binding="{Binding Attributes[1].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="END" Width="15*" Binding="{Binding Attributes[2].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="INT" Width="15*" Binding="{Binding Attributes[3].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="WIS" Width="15*" Binding="{Binding Attributes[4].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="CHR" Width="15*" Binding="{Binding Attributes[5].Value}" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="Lime" />
+                                <Setter Property="Background" Value="Black" />
+                                <Setter Property="BorderBrush" Value="Lime" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Prisoners" Controls:ControlsHelper.HeaderFontSize="24">
+                    <DataGrid Name="prisonersList" ContextMenu="{Binding Path=Prisoners, Mode=TwoWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CanUserSortColumns="False" SelectedCellsChanged="selectedList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="16" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Width="65*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="RACE" Width="44*" Binding="{Binding Race}" />
+                            <DataGridTextColumn Header="CLASS" Width="40*" Binding="{Binding Subclass}" />
+                            <DataGridTextColumn Header="LVL" Width="14*" Binding="{Binding LVL}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="STR" Width="15*" Binding="{Binding Attributes[0].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="DEX" Width="15*" Binding="{Binding Attributes[1].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="END" Width="15*" Binding="{Binding Attributes[2].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="INT" Width="15*" Binding="{Binding Attributes[3].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="WIS" Width="15*" Binding="{Binding Attributes[4].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="CHR" Width="15*" Binding="{Binding Attributes[5].Value}" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="Lime" />
+                                <Setter Property="Background" Value="Black" />
+                                <Setter Property="BorderBrush" Value="Lime" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="World" Controls:ControlsHelper.HeaderFontSize="24">
+                    <DataGrid Name="worldList" ContextMenu="{Binding Path=World, Mode=TwoWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CanUserSortColumns="False" SelectedCellsChanged="selectedList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="16" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Width="65*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="RACE" Width="44*" Binding="{Binding Race}" />
+                            <DataGridTextColumn Header="CLASS" Width="40*" Binding="{Binding Subclass}" />
+                            <DataGridTextColumn Header="LVL" Width="14*" Binding="{Binding LVL}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="STR" Width="15*" Binding="{Binding Attributes[0].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="DEX" Width="15*" Binding="{Binding Attributes[1].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="END" Width="15*" Binding="{Binding Attributes[2].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="INT" Width="15*" Binding="{Binding Attributes[3].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="WIS" Width="15*" Binding="{Binding Attributes[4].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="CHR" Width="15*" Binding="{Binding Attributes[5].Value}" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="Lime" />
+                                <Setter Property="Background" Value="Black" />
+                                <Setter Property="BorderBrush" Value="Lime" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Graveyard" Controls:ControlsHelper.HeaderFontSize="24">
+                    <DataGrid Name="graveyardList" ContextMenu="{Binding Path=Prisoners, Mode=TwoWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CanUserSortColumns="False" SelectedCellsChanged="selectedList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="16" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Width="65*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="RACE" Width="44*" Binding="{Binding Race}" />
+                            <DataGridTextColumn Header="CLASS" Width="40*" Binding="{Binding Subclass}" />
+                            <DataGridTextColumn Header="LVL" Width="14*" Binding="{Binding LVL}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="STR" Width="15*" Binding="{Binding Attributes[0].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="DEX" Width="15*" Binding="{Binding Attributes[1].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="END" Width="15*" Binding="{Binding Attributes[2].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="INT" Width="15*" Binding="{Binding Attributes[3].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="WIS" Width="15*" Binding="{Binding Attributes[4].Value}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="CHR" Width="15*" Binding="{Binding Attributes[5].Value}" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="Lime" />
+                                <Setter Property="Background" Value="Black" />
+                                <Setter Property="BorderBrush" Value="Lime" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Groups" Controls:ControlsHelper.HeaderFontSize="24">
+                    <DataGrid Name="groupsList" ContextMenu="{Binding Path=Factions, Mode=TwoWay, ElementName=ThisControl, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CanUserSortColumns="False" SelectedCellsChanged="selectedList_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" Background="#0F0F0F" Foreground="Lime" FontSize="16" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Width="45*" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="CREW" Width="15*" Binding="{Binding Count}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="COINS" Width="15*" Binding="{Binding Coins}" />
+                            <DataGridTextColumn Header="DESCRIPTION" Width="65*" Binding="{Binding Description}" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Foreground" Value="Lime" />
+                                <Setter Property="Background" Value="Black" />
+                                <Setter Property="BorderBrush" Value="Lime" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <Menu FontSize="20" Background="Transparent" Foreground="Lime">
+            <MenuItem Header="Character" Background="Transparent">
+                <MenuItem Header="Hire" Click="HireButton_Click"/>
+                <MenuItem Header="Dismiss" Click="DismissButton_Click"/>
+                <MenuItem Header="Promote" Click="PromoteButton_Click"/>
+                <MenuItem Header="Move to..." Background="Transparent">
+                    <MenuItem Header="Prison" Click="moveUnitButton_Click"/>
+                    <MenuItem Header="World" Click="moveUnitButton_Click"/>
+                    <MenuItem Name="groupToMove" Header="Group..." Background="Transparent">
+                    </MenuItem>
+                </MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="Clone" Click="CloneButton_Click"/>
+                <MenuItem Header="Import" Click="ImportUnitButton_Click"/>
+                <MenuItem Header="Export" Click="ExportUnitButton_Click"/>
+            </MenuItem>
+            <MenuItem Header="Group" Background="Transparent">
+                <MenuItem Header="Create" Click="AddFaction_Click"/>
+                <MenuItem Header="Disband" Click="DeleteFaction_Click"/>
+                <Separator></Separator>
+                <MenuItem Header="Import" Click="ImportGroupButton_Click"/>
+                <MenuItem Header="Export" Click="ExportGroupButton_Click"/>
+            </MenuItem>
+            <MenuItem Header="Mission" Background="Transparent">
+                <MenuItem Header="World" Background="Transparent" Click="WorldButton_Click"/>
+                <MenuItem Header="Arena" Background="Transparent" Click="MissionButton_Click"/>
+            </MenuItem>
+            <MenuItem Header="Story" Background="Transparent">
+                <MenuItem Header="Journal" Click="JournalButton_Click"/>
+                <MenuItem Header="Notes" Click="LogButton_Click"/>
+            </MenuItem>
+            <MenuItem Background="Transparent">
+                <MenuItem.Header>
+                    <Run Name="unitsDisplay" Text="{Binding Coins, StringFormat='Coins: {0}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                </MenuItem.Header>
+                <Controls:NumericUpDown Name="inc" BorderBrush="Lime" Value="0" BorderThickness="0" Maximum="1000000000" Minimum="-1000000000" TextAlignment="Center" Speedup="True" Interval="100" FontSize="16" Background="#0F0F0F" Foreground="Lime"/>
+                <MenuItem Header="Receive" Click="ReceiveButton_Click"/>
+            </MenuItem>
+            <MenuItem Header="Items" Background="Transparent">
+                <MenuItem Header="Storage" Background="Transparent" Click="StorageButton_Click"/>
+                <MenuItem Header="Trade" Background="Transparent" Click="TradeButton_Click"/>
+                <MenuItem Header="Shop" Background="Transparent" Click="ShopButton_Click"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Controls:MetroWindow>
