@@ -19,16 +19,29 @@ namespace Unnamed
         }
 
         public string Name { get; set; }
-        //cost/type
-        //damage/type
-        //effect/type
-        /*public int[] cost { get; set; }
-        public int[] casterMods { get; set; }
-        public int[] targetMods { get; set; }
-        public int[] casterAreaMods { get; set; }
-        public int[] targetAreaMods { get; set; }*/
+        public string Attr { get; set; }
+        public string Skill { get; set; }
+        public int cSP { get; set; } = 0;
+        public int cHP { get; set; } = 0;
+        public int cMP { get; set; } = 0;
+        public int cWP { get; set; } = 0;
+        public int tSP { get; set; } = 0;
+        public int tHP { get; set; } = 0;
+        public int tMP { get; set; } = 0;
+        public int tWP { get; set; } = 0;
+        public int caSP { get; set; } = 0;
+        public int caHP { get; set; } = 0;
+        public int caMP { get; set; } = 0;
+        public int caWP { get; set; } = 0;
+        public int taSP { get; set; } = 0;
+        public int taHP { get; set; } = 0;
+        public int taMP { get; set; } = 0;
+        public int taWP { get; set; } = 0;
+        public string DmgType { get; set; }
         public string Descr { get; set; }
         public bool IsActive { get; set; } = true;
+        public string Summon { get; set; }
+        public bool IsDrain { get; set; } = false;
 
         public Move()
         {
@@ -36,29 +49,94 @@ namespace Unnamed
             Descr = "";
         }
 
-        public Move(string name, string description)
-        {
+        public Move(string name, string attr, string skill, string mods, string type, string description)
+        {//general
             Name = name;
+            Attr = attr;
+            Skill = skill;
             Descr = description;
+            DmgType = type;
+            string[] modsList = mods.Split('\n');
+            foreach (string i in modsList)
+            {
+                string[] j = i.Split(' ');
+                switch (j[0])
+                {
+                    case "cSP":
+                        cSP = int.Parse(j[1]);
+                        break;
+                    case "cHP":
+                        cHP = int.Parse(j[1]);
+                        break;
+                    case "cMP":
+                        cMP = int.Parse(j[1]);
+                        break;
+                    case "cWP":
+                        cWP = int.Parse(j[1]);
+                        break;
+                    case "tSP":
+                        tSP = int.Parse(j[1]);
+                        break;
+                    case "tHP":
+                        tHP = int.Parse(j[1]);
+                        break;
+                    case "tMP":
+                        tMP = int.Parse(j[1]);
+                        break;
+                    case "tWP":
+                        tWP = int.Parse(j[1]);
+                        break;
+                    case "caSP":
+                        caSP = int.Parse(j[1]);
+                        break;
+                    case "caHP":
+                        caHP = int.Parse(j[1]);
+                        break;
+                    case "caMP":
+                        caMP = int.Parse(j[1]);
+                        break;
+                    case "caWP":
+                        caWP = int.Parse(j[1]);
+                        break;
+                    case "taSP":
+                        taSP = int.Parse(j[1]);
+                        break;
+                    case "taHP":
+                        taHP = int.Parse(j[1]);
+                        break;
+                    case "taMP":
+                        taMP = int.Parse(j[1]);
+                        break;
+                    case "taWP":
+                        taWP = int.Parse(j[1]);
+                        break;
+                    case "Drain":
+                        IsDrain = true;
+                        break;
+                    case "Summon":
+                        Summon = j[1];
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
-
-        /*public Move(string name, int[] cost, string description)
-        {
-            Name = name;
-            Descr = description;
-            this.cost = cost;
-        }*/
 
         public static Move Find(string name) => List.FirstOrDefault(x => x.Name == name);
         public static List<Move> List { get; set; } = new List<Move> {
-            new Move("Punch", "STR\nBrawl\ncSP -5\ntHP -3\ntSP -2"),
+            //new Move("Punch", "STR\nBrawl\ncSP -5\ntHP -3\ntSP -2"),
+            new Move("Punch", "STR", "Brawl", "cSP -5\ntHP -3\ntSP -2", "", "5 SP\nPunch the enemy!"),
 
-            new Move("Fire Punch", "STR\nBrawl\ncSP -5\ncMP -5\ntHP -10\nFire"),
-            new Move("Fire Blast", "INT\nPyrokinetic\ncMP -10\ntHP -10\nFire"),
-            new Move("Haste", "INT\nPyrokinetic\ncMP -10\ncWP -10\ncHP -10\ncSP +40\nFire"),
-            new Move("Explosion", "INT\nPyrokinetic\ncMP -30\ntaHP -10\nFire"),
+            //new Move("Fire Punch", "STR\nBrawl\ncSP -5\ncMP -5\ntHP -10\nFire"),
+            new Move("Fire Punch", "STR", "Brawl", "cSP -10\ncMP -10\ntHP -10", "Fire", "10 SP / 10 MP\nFire punch!"),
+            //new Move("Fire Blast", "INT\nPyrokinetic\ncMP -10\ntHP -10\nFire"),
+            new Move("Fire Blast", "INT", "Pyrokinetic", "cSP -10\ncMP -10\ntHP -10", "Fire", "10 SP / 10 MP\nFire blast!"),
+            //new Move("Haste", "INT\nPyrokinetic\ncMP -10\ncWP -10\ncHP -10\ncSP +40\nFire"),
+            new Move("Haste", "INT", "Pyrokinetic", "cMP -10\ncWP -10\ncHP -10\ncSP +10", "Fire", "+10 SP at the cost of -10 HP, MP & WP\nHaste!"),
+            //new Move("Explosion", "INT\nPyrokinetic\ncMP -30\ntaHP -10\nFire"),
+            new Move("Explosion", "INT", "Pyrokinetic", "cSP -30\ncMP -30\ntaHP -10", "Fire", "30 SP / 10 MP\nDeals fire damage to all enemies!\nExplosion!"),
 
-            new Move("Static Punch", "STR\nBrawl\ncSP -5\ncMP -7\ntHP -8\ntMP -4\nStorm"),
+            /*new Move("Static Punch", "STR\nBrawl\ncSP -5\ncMP -7\ntHP -8\ntMP -4\nStorm"),
             new Move("Spark", "INT\nAerotheurge\ncMP -12\ntHP -6\ntMP -6\nStorm"),
             new Move("Windfury", "INT\nAerotheurge\ncMP -5\ncWP -5\ncSP +15\nStorm"),
             new Move("Tailwind", "INT\nAerotheurge\ncMP -25\ncWP -20\ncaSP +5\ntaSP -5\nStorm"),
@@ -189,7 +267,7 @@ namespace Unnamed
             new Move("Stone Rain", "INT\nGeomagnetic\ncMP -24\ncaHP -10\ntaHP -12\ntaSP -10\nRock"),
             new Move("Wine Frenzy", "WIS\nForceOfNature\ncMP -30\ncWP -10\ncaSP -10\ntaHP -10\ntaSP -20\nPlant"),
             new Move("Hungry Tentacles", "INT\nEntropy\ncMP -30\ncWP -15\ncaSP -10\ncaWP -5\ntaHP -10\ntaSP -10\ntaMP -5\ntaWP -5\nVoid"),
-            new Move("Dominate Mind", "WIS\nPsionics\ncMP -20\ncWP -10\ntWP -30\nPsy")
+            new Move("Dominate Mind", "WIS\nPsionics\ncMP -20\ncWP -10\ntWP -30\nPsy")*/
         };
     }
 }

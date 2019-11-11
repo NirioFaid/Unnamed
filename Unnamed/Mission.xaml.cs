@@ -37,7 +37,6 @@ namespace Unnamed
         public string BufElementType = null;
         public Item BufCraftItem = null;
         public bool ItemRequired = false;
-        public bool IsDrain = false;
         public int EnemySPdec { get; set; }
 
         Random r = new Random();
@@ -49,7 +48,6 @@ namespace Unnamed
             mainwindow = mw;
             allyList.ItemsSource = AllyList;
             enemyList.ItemsSource = EnemyList;
-            FillStatLists();
             Update();
 
             enemyAutoTimer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate
@@ -74,13 +72,6 @@ namespace Unnamed
         private void leaveButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        void FillStatLists()
-        {
-            List<StatData> all = (new Unit(true)).AllSkills();
-            allyAtckType.Items.Clear(); enemyAtckType.Items.Clear();
-            foreach (StatData a in all) { allyAtckType.Items.Add(a.Name); enemyAtckType.Items.Add(a.Name); }
         }
 
         void Update()
@@ -244,7 +235,7 @@ namespace Unnamed
 
         void UseMove(bool isAlly)
         {
-            if (AllyList.Count == 0 || EnemyList.Count == 0) { UnselectMoves(); ClearMods(); return; }
+            if (AllyList.Count == 0 || EnemyList.Count == 0) { UnselectMoves(); return; }
             Unit caster = null, target = null;
             ObservableCollection<Unit> casterArea = new ObservableCollection<Unit> { };
             ObservableCollection<Unit> targetArea = new ObservableCollection<Unit> { };
@@ -254,64 +245,42 @@ namespace Unnamed
             double casterAHPmod, casterAMPmod, casterASPmod, casterAWPmod, targetAHPmod, targetAMPmod, targetASPmod, targetAWPmod;
             double HPdmg = 0, MPdmg = 0, SPdmg = 0, WPdmg = 0;
             double AHPdmg = 0, AMPdmg = 0, ASPdmg = 0, AWPdmg = 0;
-            if (isAlly && allyDMGType.Text != null && allyAtckType != null)
+            Move selMove;
+            if (isAlly && allyMoves.SelectedItem != null)
             {
                 caster = SelectedAlly; target = SelectedEnemy;
                 casterArea = AllyList; targetArea = EnemyList;
-                atckType = allyAtckType.Text;
-                DMGType = allyDMGType.Text;
-
-
-                casterHPmod = (int)allyHPChange.Value;
-                casterMPmod = (int)allyMPChange.Value;
-                casterSPmod = (int)allySPChange.Value;
-                casterWPmod = (int)allyWPChange.Value;
-
-                casterAHPmod = (int)allyAHPChange.Value;
-                casterAMPmod = (int)allyAMPChange.Value;
-                casterASPmod = (int)allyASPChange.Value;
-                casterAWPmod = (int)allyAWPChange.Value;
-
-                targetHPmod = (int)enemyHPChange.Value;
-                targetMPmod = (int)enemyMPChange.Value;
-                targetSPmod = (int)enemySPChange.Value;
-                targetWPmod = (int)enemyWPChange.Value;
-
-                targetAHPmod = (int)enemyAHPChange.Value;
-                targetAMPmod = (int)enemyAMPChange.Value;
-                targetASPmod = (int)enemyASPChange.Value;
-                targetAWPmod = (int)enemyAWPChange.Value;
+                selMove = allyMoves.SelectedItem as Move;
             }
-            else if (!isAlly && enemyDMGType.Text != null && enemyAtckType != null)
+            else if (!isAlly && enemyMoves.SelectedItem != null)
             {
                 caster = SelectedEnemy; target = SelectedAlly;
                 casterArea = EnemyList; targetArea = AllyList;
-                atckType = enemyAtckType.Text;
-                DMGType = enemyDMGType.Text;
-
-                casterHPmod = (int)enemyHPChange.Value;
-                casterMPmod = (int)enemyMPChange.Value;
-                casterSPmod = (int)enemySPChange.Value;
-                casterWPmod = (int)enemyWPChange.Value;
-
-                casterAHPmod = (int)enemyAHPChange.Value;
-                casterAMPmod = (int)enemyAMPChange.Value;
-                casterASPmod = (int)enemyASPChange.Value;
-                casterAWPmod = (int)enemyAWPChange.Value;
-
-                targetHPmod = (int)allyHPChange.Value;
-                targetMPmod = (int)allyMPChange.Value;
-                targetSPmod = (int)allySPChange.Value;
-                targetWPmod = (int)allyWPChange.Value;
-
-                targetAHPmod = (int)allyAHPChange.Value;
-                targetAMPmod = (int)allyAMPChange.Value;
-                targetASPmod = (int)allyASPChange.Value;
-                targetAWPmod = (int)allyAWPChange.Value;
+                selMove = enemyMoves.SelectedItem as Move;
             }
             else { return; };
+            atckType = selMove.Skill;
+            DMGType = selMove.Attr;
 
-            if (casterMPmod<0) casterSPmod += casterMPmod;
+            casterHPmod = selMove.cHP;
+            casterMPmod = selMove.cMP;
+            casterSPmod = selMove.cSP;
+            casterWPmod = selMove.cWP;
+
+            casterAHPmod = selMove.caHP;
+            casterAMPmod = selMove.caMP;
+            casterASPmod = selMove.caSP;
+            casterAWPmod = selMove.caWP;
+
+            targetHPmod = selMove.tHP;
+            targetMPmod = selMove.tMP;
+            targetSPmod = selMove.tSP;
+            targetWPmod = selMove.tWP;
+
+            targetAHPmod = selMove.taHP;
+            targetAMPmod = selMove.taMP;
+            targetASPmod = selMove.taSP;
+            targetAWPmod = selMove.taWP;
 
             if (BufItem != null)
             {
@@ -723,8 +692,8 @@ namespace Unnamed
                         if (HPdmg * HP_MOD + target.Armor("physical") <= 0) HPdmg += target.Armor("physical");
                         else HPdmg = 0;
                     }
-                    if (IsDrain && HPdmg * HP_MOD < 0) caster.HP += (int)Math.Abs(HPdmg * HP_MOD);
-                    if (IsDrain && SPdmg * SP_MOD < 0) caster.SP += (int)Math.Abs(SPdmg * SP_MOD);
+                    if (selMove.IsDrain && HPdmg * HP_MOD < 0) caster.HP += (int)Math.Abs(HPdmg * HP_MOD);
+                    if (selMove.IsDrain && SPdmg * SP_MOD < 0) caster.SP += (int)Math.Abs(SPdmg * SP_MOD);
                     target.HP += (int)(HPdmg*HP_MOD);
                     target.SP += (int)(SPdmg*SP_MOD);
                 }
@@ -740,8 +709,8 @@ namespace Unnamed
                         if (WPdmg * WP_MOD + target.Armor("magic") <= 0) WPdmg += target.Armor("magic");
                         else WPdmg = 0;
                     }
-                    if (IsDrain && MPdmg * MP_MOD < 0) caster.MP += (int)Math.Abs(MPdmg * MP_MOD);
-                    if (IsDrain && WPdmg * WP_MOD < 0) caster.SP += (int)Math.Abs(WPdmg * WP_MOD);
+                    if (selMove.IsDrain && MPdmg * MP_MOD < 0) caster.MP += (int)Math.Abs(MPdmg * MP_MOD);
+                    if (selMove.IsDrain && WPdmg * WP_MOD < 0) caster.SP += (int)Math.Abs(WPdmg * WP_MOD);
                     if (target.MP + (int)(MPdmg * MP_MOD) < 0) target.WP += (int)(MPdmg * MP_MOD) + target.MP;
                     target.MP += (int)(MPdmg*MP_MOD);
                     target.WP += (int)(WPdmg*WP_MOD);
@@ -763,36 +732,11 @@ namespace Unnamed
             BufSummon = null;
             BufElementType = null;
             BufCraftItem = null;
-            IsDrain = false;
-        }
-
-        void ClearMods()
-        {
-            allyHPChange.Value = 0;
-            allySPChange.Value = 0;
-            allyMPChange.Value = 0;
-            allyWPChange.Value = 0;
-
-            allyAHPChange.Value = 0;
-            allyASPChange.Value = 0;
-            allyAMPChange.Value = 0;
-            allyAWPChange.Value = 0;
-
-            enemyHPChange.Value = 0;
-            enemySPChange.Value = 0;
-            enemyMPChange.Value = 0;
-            enemyWPChange.Value = 0;
-
-            enemyAHPChange.Value = 0;
-            enemyASPChange.Value = 0;
-            enemyAMPChange.Value = 0;
-            enemyAWPChange.Value = 0;
         }
 
         private void allyThrowButton_Click(object sender, RoutedEventArgs e)
         {
             UseMove(true);
-            ClearMods();
             UnselectMoves();
         }
 
@@ -942,230 +886,17 @@ namespace Unnamed
             }
         }
 
-        private void charValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        void InputMods(Move move, bool isAlly)
         {
-            Unit caster = null;
-            if (turnDisplay.Content.ToString() != "START BATTLE")
-            {
-                BP = 0;
-                if (turnDisplay.Content.ToString() == "YOUR TURN") {
-                    caster = SelectedAlly;
-                    AllySPdec = 0;
-                    BP -= (int)allyHPChange.Value;
-                    if ((int)allyHPChange.Value < 0) AllySPdec += (int)allyHPChange.Value;
-                    BP -= (int)allyMPChange.Value;
-                    if ((int)allyMPChange.Value < 0) AllySPdec += (int)allyMPChange.Value;
-                    BP -= (int)allySPChange.Value;
-                    if ((int)allySPChange.Value < 0) AllySPdec += (int)allySPChange.Value;
-                    BP -= (int)allyWPChange.Value;
-                    if ((int)allyWPChange.Value < 0) AllySPdec += (int)allyWPChange.Value;
-
-                    BP -= (int)allyAHPChange.Value * 3;
-                    if ((int)allyAHPChange.Value < 0) AllySPdec += (int)allyAHPChange.Value;
-                    BP -= (int)allyAMPChange.Value * 3;
-                    if ((int)allyAMPChange.Value < 0) AllySPdec += (int)allyAMPChange.Value;
-                    BP -= (int)allyASPChange.Value * 3;
-                    if ((int)allyASPChange.Value < 0) AllySPdec += (int)allyASPChange.Value;
-                    BP -= (int)allyAWPChange.Value * 3;
-                    if ((int)allyAWPChange.Value < 0) AllySPdec += (int)allyAWPChange.Value;
-
-                    if (IsDrain) BP /= 2;
-
-                    BP += (int)enemyHPChange.Value;
-                    BP += (int)enemySPChange.Value;
-                    BP += (int)enemyMPChange.Value;
-                    BP += (int)enemyWPChange.Value;
-
-                    BP += (int)enemyAHPChange.Value * 3;
-                    BP += (int)enemyASPChange.Value * 3;
-                    BP += (int)enemyAMPChange.Value * 3;
-                    BP += (int)enemyAWPChange.Value * 3;
-                }
-                else {
-                    caster = SelectedEnemy;
-                    EnemySPdec = 0;
-                    BP -= (int)enemyHPChange.Value;
-                    if ((int)enemyHPChange.Value < 0) EnemySPdec += (int)enemyHPChange.Value;
-                    BP -= (int)enemyMPChange.Value;
-                    if ((int)enemyMPChange.Value < 0) EnemySPdec += (int)enemyMPChange.Value;
-                    BP -= (int)enemySPChange.Value;
-                    if ((int)enemySPChange.Value < 0) EnemySPdec += (int)enemySPChange.Value;
-                    BP -= (int)enemyWPChange.Value;
-                    if ((int)enemyWPChange.Value < 0) EnemySPdec += (int)enemyWPChange.Value;
-
-                    BP -= (int)enemyAHPChange.Value * 3;
-                    if ((int)enemyAHPChange.Value < 0) EnemySPdec += (int)enemyAHPChange.Value;
-                    BP -= (int)enemyAMPChange.Value * 3;
-                    if ((int)enemyAMPChange.Value < 0) EnemySPdec += (int)enemyAMPChange.Value;
-                    BP -= (int)enemyASPChange.Value * 3;
-                    if ((int)enemyASPChange.Value < 0) EnemySPdec += (int)enemyASPChange.Value;
-                    BP -= (int)enemyAWPChange.Value * 3;
-                    if ((int)enemyAWPChange.Value < 0) EnemySPdec += (int)enemyAWPChange.Value;
-
-                    if (IsDrain) BP /= 2;
-
-                    BP += (int)allyHPChange.Value;
-                    BP += (int)allySPChange.Value;
-                    BP += (int)allyMPChange.Value;
-                    BP += (int)allyWPChange.Value;
-
-                    BP += (int)allyAHPChange.Value * 3;
-                    BP += (int)allyASPChange.Value * 3;
-                    BP += (int)allyAMPChange.Value * 3;
-                    BP += (int)allyAWPChange.Value * 3;
-                }
-            }
-            Update();
-        }
-
-        void InputMods(string script, bool isAlly)
-        {
-            if (script != null && script != "" && AllyList.Count > 0 && EnemyList.Count > 0)
+            if (move != null && move != null && AllyList.Count > 0 && EnemyList.Count > 0)
             {
                 try
                 {
                     Unit caster;
                     if (isAlly) caster = SelectedAlly;
                     else caster = SelectedEnemy;
-
-                    string[] moveProps = script.Split('\n');
-                    
-                    for (int i = 0; i < moveProps.Length; i++)
-                    {
-                        string[] prop = moveProps[i].Split(' ');
-                        if (prop.Count() > 2) foreach (string s in prop) { if (s == prop[0] || s == prop[1]) continue; else prop[1] += " " + s; }
-                        if (caster.AllStats().Find(x => x.Name == prop[0]) != null)
-                        {
-                            if (prop.Count() > 1 && caster.Stat(prop[0]) < Int32.Parse(prop[1])) { ClearMods(); UnselectMoves(); break; }
-                            if (isAlly)
-                            {
-                                if (caster.Attributes.Find(x => x.Name == prop[0]) != null) allyDMGType.SelectedValue = prop[0];
-                                else allyAtckType.SelectedItem = prop[0];
-                            } else
-                            {
-                                if (caster.Attributes.Find(x => x.Name == prop[0]) != null) enemyDMGType.SelectedValue = prop[0];
-                                else enemyAtckType.SelectedItem = prop[0];
-                            }
-                        }
-                        switch (prop[0])
-                        {
-                            case "cHP":
-                                if (isAlly) { allyHPChange.Value = Int32.Parse(prop[1]); if (caster.HP + allyHPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                else { enemyHPChange.Value = Int32.Parse(prop[1]); if (caster.HP + enemyHPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                break;
-                            case "cMP":
-                                if (isAlly) { allyMPChange.Value = Int32.Parse(prop[1]); if (caster.MP + allyMPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                else { enemyMPChange.Value = Int32.Parse(prop[1]); if (caster.MP + enemyMPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                break;
-                            case "cSP":
-                                if (isAlly) { allySPChange.Value = Int32.Parse(prop[1]); if (caster.SP + allySPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                else { enemySPChange.Value = Int32.Parse(prop[1]); if (caster.SP + enemySPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                break;
-                            case "cWP":
-                                if (isAlly) { allyWPChange.Value = Int32.Parse(prop[1]); if (caster.WP + allyWPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                else { enemyWPChange.Value = Int32.Parse(prop[1]); if (caster.WP + enemyWPChange.Value < 0) { UnselectMoves(); ClearMods(); return; } }
-                                break;
-                            case "tHP":
-                                if (!isAlly) allyHPChange.Value = Int32.Parse(prop[1]);
-                                else enemyHPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "tMP":
-                                if (!isAlly) allyMPChange.Value = Int32.Parse(prop[1]);
-                                else enemyMPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "tSP":
-                                if (!isAlly) allySPChange.Value = Int32.Parse(prop[1]);
-                                else enemySPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "tWP":
-                                if (!isAlly) allyWPChange.Value = Int32.Parse(prop[1]);
-                                else enemyWPChange.Value = Int32.Parse(prop[1]);
-                                break;
-
-                            case "caHP":
-                                if (isAlly) allyAHPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAHPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "caMP":
-                                if (isAlly) allyAMPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAMPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "caSP":
-                                if (isAlly) allyASPChange.Value = Int32.Parse(prop[1]);
-                                else enemyASPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "caWP":
-                                if (isAlly) allyAWPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAWPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "taHP":
-                                if (!isAlly) allyAHPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAHPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "taMP":
-                                if (!isAlly) allyAMPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAMPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "taSP":
-                                if (!isAlly) allyASPChange.Value = Int32.Parse(prop[1]);
-                                else enemyASPChange.Value = Int32.Parse(prop[1]);
-                                break;
-                            case "taWP":
-                                if (!isAlly) allyAWPChange.Value = Int32.Parse(prop[1]);
-                                else enemyAWPChange.Value = Int32.Parse(prop[1]);
-                                break;
-
-                            case "Consumable":
-                                if (isAlly) BufItem = allyItems.SelectedItem as Item;
-                                else BufItem = enemyItems.SelectedItem as Item;
-                                break;
-                            case "Uses":
-                                if (isAlly) BufItem = SelectedAlly.Inventory.Where(x => x.Name.Contains(prop[1])).FirstOrDefault();
-                                else BufItem = SelectedEnemy.Inventory.Where(x => x.Name.Contains(prop[1])).FirstOrDefault();
-                                if (BufItem == null) ClearMods();
-                                break;
-                            case "Summon":
-                                if (isAlly) BufSummon = new Unit(prop[1]);
-                                else BufSummon = new Unit(prop[1]);
-                                break;
-                            case "Drain":
-                                IsDrain = true;
-                                break;
-                            case "Create":
-                                {
-                                    Random r = new Random();
-                                    List<StatData> s = new List<StatData> { };
-                                    Unit creator = null;
-                                    if (isAlly) creator = SelectedAlly;
-                                    else creator = SelectedEnemy;
-
-                                    switch (prop[1])
-                                    {
-                                        default: break;
-                                    }
-                                }
-                                break;
-
-                            case "Fire":
-                            case "Storm":
-                            case "Water":
-                            case "Ice":
-                            case "Rock":
-                            case "Plant":
-                            case "Light":
-                            case "Void":
-                            case "Psy":
-                            case "Steel":
-                            case "Bug":
-                            case "Earth":
-                            case "Poison":
-                                BufElementType = prop[0];
-                                break;
-                            default: break;
-                        }
-                    }
-                    if ((isAlly && (SelectedAlly.SP + allySPChange.Value + allyMPChange.Value) < 0) || (!isAlly && (SelectedEnemy.SP + enemySPChange.Value + enemyMPChange.Value) < 0)) { UnselectMoves(); ClearMods(); return; }
-                    else { displayHitChance(); }
+                    if ((caster.HP + move.cHP < 0) || (caster.MP + move.cMP < 0) || (caster.SP + move.cSP < 0) || (caster.WP + move.cWP < 0)) { UnselectMoves(); return; }
+                    else { displayHitChance(move); }
                 }
                 catch { }
             }
@@ -1174,18 +905,17 @@ namespace Unnamed
 
         void InputMoveMods(Move move, bool isAlly)
         {
-            if (move != null) InputMods(move.Descr, isAlly);
+            if (move != null) InputMods(move, isAlly);
         }
 
         void InputItemMods(Item item, bool isAlly)
         {
-            if (item != null) InputMods(item.Description, isAlly);
+            //if (item != null) InputMods(item.Description, isAlly);
         }
 
         private void enemyThrowButton_Click(object sender, RoutedEventArgs e)
         {
             UseMove(false);
-            ClearMods();
             UnselectMoves();
         }
 
@@ -1193,7 +923,7 @@ namespace Unnamed
         {
             if (turnDisplay.Content != null && turnDisplay.Content.ToString() == "YOUR TURN")
             {
-                ClearMods(); allyItems.SelectedItem = null;
+                allyItems.SelectedItem = null;
                 Move selected = allyMoves.SelectedItem as Move;
                 InputMoveMods(selected, true);
             }
@@ -1203,7 +933,7 @@ namespace Unnamed
         {
             if (turnDisplay.Content != null && turnDisplay.Content.ToString() == "ENEMY TURN")
             {
-                ClearMods(); enemyItems.SelectedItem = null;
+                enemyItems.SelectedItem = null;
                 Move selected = enemyMoves.SelectedItem as Move;
                 InputMoveMods(selected, false);
             }
@@ -1329,7 +1059,6 @@ namespace Unnamed
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
-            ClearMods();
             UnselectMoves();
         }
 
@@ -1337,7 +1066,7 @@ namespace Unnamed
         {
             if (turnDisplay.Content != null && turnDisplay.Content.ToString() == "ENEMY TURN")
             {
-                ClearMods(); enemyMoves.SelectedItem = null;
+                enemyMoves.SelectedItem = null;
                 Item selected = enemyItems.SelectedItem as Item;
                 InputItemMods(selected, false);
             }
@@ -1347,7 +1076,7 @@ namespace Unnamed
         {
             if (turnDisplay.Content != null && turnDisplay.Content.ToString() == "YOUR TURN")
             {
-                ClearMods(); allyMoves.SelectedItem = null;
+                allyMoves.SelectedItem = null;
                 Item selected = allyItems.SelectedItem as Item;
                 InputItemMods(selected, true);
             }
@@ -1356,7 +1085,7 @@ namespace Unnamed
         private void endBattleButton_Click(object sender, RoutedEventArgs e)
         {
             turnDisplay.Content = "START BATTLE";
-            UnselectMoves(); ClearMods();
+            UnselectMoves();
             foreach (Unit u in AllyList) u.SP = 0;
             foreach (Unit u in EnemyList) u.SP = 0;
             Update();
@@ -1368,22 +1097,22 @@ namespace Unnamed
             trade.ShowDialog();
         }
 
-        private void displayHitChance()
+        private void displayHitChance(Move move)
         {
             if (AllyList.Count() > 0 && EnemyList.Count() > 0)
             {
                 if (turnDisplay.Content.ToString() == "YOUR TURN")
                 {
-                    int hitChance = SelectedAlly.Stat(allyAtckType.SelectedItem.ToString());
-                    int critDMG = SelectedAlly.Stat(allyDMGType.SelectedValue.ToString());
+                    int hitChance = SelectedAlly.Stat(move.Skill);
+                    int critDMG = SelectedAlly.Stat(move.Attr);
                     if (hitChance <= 98 && hitChance >= 2) hitBox.Text = $"{hitChance}% hit | {critDMG}% crit";
                     else if (hitChance <= 2) hitBox.Text = $"~2% hit | {critDMG}% crit";
                     else if (hitChance >= 98) hitBox.Text = $"~98% hit | {critDMG}% crit";
                 }
                 else if (turnDisplay.Content.ToString() == "ENEMY TURN")
                 {
-                    int hitChance = SelectedEnemy.Stat(enemyAtckType.SelectedItem.ToString());
-                    int critDMG = SelectedEnemy.Stat(enemyDMGType.SelectedValue.ToString());
+                    int hitChance = SelectedEnemy.Stat(move.Skill);
+                    int critDMG = SelectedEnemy.Stat(move.Attr);
                     if (hitChance <= 98 && hitChance >= 2) hitBox.Text = $"{hitChance}% hit | {critDMG}% crit";
                     else if (hitChance <= 2) hitBox.Text = $"~2% hit | {critDMG}% crit";
                     else if (hitChance >= 98) hitBox.Text = $"~98% hit | {critDMG}% crit";
@@ -1420,7 +1149,6 @@ namespace Unnamed
             if (EnemySPdec!=0)
             {
                 UseMove(false);
-                ClearMods();
                 UnselectMoves();
             }
             else if (SelectedEnemy.SP < 8)

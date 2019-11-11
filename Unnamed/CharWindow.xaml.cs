@@ -395,11 +395,11 @@ namespace Unnamed
 
         private void addPassive_Click(object sender, RoutedEventArgs e)
         {
-            if (currentlyShownUnit != null)
+            /*if (currentlyShownUnit != null)
             {
                 currentlyShownUnit.Passives.Add(new Move("",""));
                 shake();
-            }
+            }*/
         }
 
         private void delPassive_Click(object sender, RoutedEventArgs e)

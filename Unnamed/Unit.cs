@@ -105,7 +105,7 @@ namespace Unnamed
 
             switch (name)
             {
-                case "Wolf":
+                /*case "Wolf":
                     Attributes.Add(new StatData("STR", r.Next(40, 61)));
                     Attributes.Add(new StatData("DEX", r.Next(50, 76)));
                     Attributes.Add(new StatData("END", r.Next(10, 61)));
@@ -845,7 +845,7 @@ namespace Unnamed
 
                     SetPersonalityTraits();
                     GenerateAvatar();
-                    break;
+                    break;*/
                 default:
                     if (DefaultRaces.Contains(name)) { Race = name; generateUnitData(); }
                     else generateUnitData();

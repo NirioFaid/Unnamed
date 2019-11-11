@@ -115,7 +115,6 @@ namespace Unnamed
             new Item("Large Backpack", 100, 3, "CW +45"),
             new Item("Spacious Backpack", 150, 3, "CW +60"),
             new Item("Advanced Backpack", 250, 3, "CW +90"),
-            new Item("Bedroll", 15, 3.5, "Need to rest outdoors"),
             new Item("Camping Supplies", 15, 3, 4, "Need to rest outdoors, consumable"),
         };
 
