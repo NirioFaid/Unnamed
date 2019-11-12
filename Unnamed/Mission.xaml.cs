@@ -785,7 +785,7 @@ namespace Unnamed
                             }
                         }
 
-                        u.MP += u.MP / 20 + MPR;
+                        u.MP += u.MP / 4 + MPR;
                         u.SP += 10 + SPR + u.Stat("DEX") / 2;
                         u.HP += HPR;
                         u.WP += WPR;
@@ -825,7 +825,7 @@ namespace Unnamed
                             }
                         }
 
-                        u.MP += u.MP / 20 + MPR;
+                        u.MP += u.MP / 4 + MPR;
                         u.SP += 10 + SPR + u.Stat("DEX") / 2;
                         u.HP += HPR;
                         u.WP += WPR;
@@ -841,12 +841,12 @@ namespace Unnamed
                         foreach(Unit u in AllyList)
                         {
                             u.SP = 15 + (u.Stat("WIS") + u.Stat("DEX")) / 8;
-                            u.MP += u.MP / 30;
+                            u.MP += u.MP / 4;
                         }
                         foreach (Unit u in EnemyList)
                         {
                             u.SP = 15 + (u.Stat("WIS") + u.Stat("DEX")) / 8;
-                            u.MP += u.MP / 30;
+                            u.MP += u.MP / 4;
                         }
                     }
                     else {
@@ -856,12 +856,12 @@ namespace Unnamed
                         foreach (Unit u in AllyList)
                         {
                             u.SP = 15 + (u.Stat("WIS") + u.Stat("DEX")) / 8;
-                            u.MP += u.MP / 30;
+                            u.MP += u.MP / 4;
                         }
                         foreach (Unit u in EnemyList)
                         {
                             u.SP = 15 + (u.Stat("WIS") + u.Stat("DEX")) / 8;
-                            u.MP += u.MP / 30;
+                            u.MP += u.MP / 4;
                         }
                     }
                 }
