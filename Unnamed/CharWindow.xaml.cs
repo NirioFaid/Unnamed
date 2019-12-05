@@ -421,18 +421,14 @@ namespace Unnamed
 
         private void camp_Click(object sender, RoutedEventArgs e)
         {
-            if (currentlyShownUnit.Inventory.Contains(currentlyShownUnit.Inventory.Where(x => x.Name.Equals("Bedroll")).FirstOrDefault()))
+            var supply = currentlyShownUnit.Inventory.Where(x => x.Name.Equals("Camping Supplies")).FirstOrDefault();
+            if (supply != null)
             {
-                var supply = currentlyShownUnit.Inventory.Where(x => x.Name.Equals("Camping Supplies")).FirstOrDefault();
-                if (supply != null)
-                {
-                    if (supply.Stack > 1) supply.Stack--;
-                    else currentlyShownUnit.Inventory.Remove(supply);
-                    FullRestore();
-                }
-                else this.ShowMessageAsync("Not enough camping supplies","So you can't camp now");
+                if (supply.Stack > 1) supply.Stack--;
+                else currentlyShownUnit.Inventory.Remove(supply);
+                FullRestore();
             }
-            else this.ShowMessageAsync("Can't rest now", "You need bedroll to make a camp rest");
+            else this.ShowMessageAsync("Not enough camping supplies", "So you can't camp now");
         }
 
         void FullRestore()

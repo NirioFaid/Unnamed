@@ -884,25 +884,16 @@ namespace Unnamed
             CombatSkills.Add(new StatData("Accuracy", r.Next(Stat("DEX"), Stat("DEX")*5)));//8
             CombatSkills.Add(new StatData("Throwing", r.Next(Stat("DEX"), Stat("DEX")*5)));//9
             CombatSkills.Add(new StatData("ShortBlade", r.Next(Stat("DEX"), Stat("DEX")*5)));//10
-            CombatSkills.Add(new StatData("Whip", r.Next(Stat("DEX"), Stat("DEX")*5)));//11
-            CombatSkills.Add(new StatData("Stave", r.Next(Stat("DEX"), Stat("DEX")*5)));//12
-            CombatSkills.Add(new StatData("Polearms", r.Next(Stat("STR"), Stat("STR")*5)));//13
 
-            CombatSkills.Add(new StatData("Brawl", r.Next(Stat("STR"), Stat("STR")*5)));//14
-            CombatSkills.Add(new StatData("LongBlade", r.Next(Stat("STR"), Stat("STR")*5)));//15
-            CombatSkills.Add(new StatData("Axe", r.Next(Stat("STR"), Stat("STR")*5)));//16
-            CombatSkills.Add(new StatData("BluntWeapon", r.Next(Stat("STR"), Stat("STR")*5)));//17
-            CombatSkills.Add(new StatData("Block", r.Next(Stat("END"), Stat("END")*5)));//18
-
-            CombatSkills.Add(new StatData("Persuasion", r.Next(Stat("CHR"), Stat("CHR")*5)));//1
-            CombatSkills.Add(new StatData("Performance", r.Next(Stat("CHR"), Stat("CHR")*5)));//2
+            CombatSkills.Add(new StatData("Brawl", r.Next(Stat("STR"), Stat("STR")*5)));//11
+            CombatSkills.Add(new StatData("LongBlade", r.Next(Stat("STR"), Stat("STR")*5)));//12
+            CombatSkills.Add(new StatData("Axe", r.Next(Stat("STR"), Stat("STR")*5)));//13
+            CombatSkills.Add(new StatData("BluntWeapon", r.Next(Stat("STR"), Stat("STR")*5)));//14
 
             Coins = r.Next(0, Cost / 2);
             if (Race == null) GenerateRace();
             else SetRaceBonuces();
             setSubclass();
-            SetPersonalityTraits();
-            SetCharBio();
             setStarterPack();
             switch (r.Next(0, 2))
             {
@@ -913,6 +904,8 @@ namespace Unnamed
                 default: break;
             }
             HP = maxHP; MP = maxMP; WP = maxWP;
+            CombatSkills = CombatSkills.OrderBy(o => o.Value).ToList();
+            CombatSkills.RemoveRange(0, r.Next(11, 15));
             GenerateCodename();
             GenerateAvatar();
         }
@@ -991,52 +984,14 @@ namespace Unnamed
             return totalArmor;
         }
 
-        public void SetPersonalityTraits()
-        {
-            CharTraits.Add(new StatData("Lawfulness",  r.Next(2, 7) - Stat("DEX") / 8));//1
-            CharTraits.Add(new StatData("Kindness", r.Next(0,7)));//2
-        }
-
-        public void SetCharBio()
-        {
-            List<string> habitats = new List<string>
-            {
-                "Mountains", "Hills", "Forest", "Desert", "Town"
-            };
-            Habitat = habitats[r.Next(0, habitats.Count)];
-            List<string> backgrounds = new List<string>
-            {
-                "Acolyte", "Scholar", "Criminal", "Barbarian", "Hero", "Artisan", "Hermit", "Noble", "Outlander",
-                "Sage", "Sailor", "Soldier", "Outlaw", "Rogue", "Mystic"
-            };
-            Background = backgrounds[r.Next(0, backgrounds.Count)];
-            Mutations.Add(new StatData("Unknown",r.Next(0,60)));
-        }
-
         public void SetRaceBonuces()
         {
             switch (Race)
             {
-                case "Tiefling":
-                    IncStat("INT", 1);
-                    IncStat("CHR", 2);
-                    IncStat("Pyrokinetic", r.Next(0, 7));
-                    IncStat("Aerotheurge", r.Next(0, 7));
-                    IncStat("Hydrosophist", r.Next(0, 7));
-                    IncStat("Geomagnetic", r.Next(0, 7));
-                    IncStat("PowerOfLight", r.Next(0, 7));
-                    IncStat("ForceOfNature", r.Next(0, 7));
-                    IncStat("Psionics", r.Next(0, 7));
-                    IncStat("Entropy", r.Next(0, 7));
-                    break;
                 case "Elf":
                     IncStat("DEX", 2);
-                    IncStat("Pyrokinetic", r.Next(0, 10));
-                    IncStat("Aerotheurge", r.Next(0, 10));
-                    IncStat("Hydrosophist", r.Next(0, 10));
-                    IncStat("PowerOfLight", r.Next(0, 10));
-                    IncStat("Psionics", r.Next(0, 10));
-                    IncStat("Entropy", r.Next(0, 10));
+                    IncStat("INT", 2);
+                    IncStat("CHR", 2);
                     List<StatData> highElfList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[5], CombatSkills[6], CombatSkills[7], CombatSkills[8], CombatSkills[10], CombatSkills[11] };
                     List<StatData> highElfSorted = highElfList.OrderByDescending(o => o.Value).ToList();
                     highElfSorted[0].Value += 6;
@@ -1049,177 +1004,12 @@ namespace Unnamed
                     IncStat("WIS", 1);
                     IncStat("CHR", 1);
                     break;
-                case "Half-Orc":
+                case "Orc":
                     IncStat("STR", 2);
                     IncStat("END", 1);
-                    IncStat("Brawl", 12);
-                    IncStat("Block", r.Next(0, 15));
-                    IncStat("Persuasion", -8);
-                    IncStat("Performance", -8);
                     List<StatData> orcList = new List<StatData> { CombatSkills[15], CombatSkills[16], CombatSkills[17] };
                     List<StatData> orcListSorted = orcList.OrderByDescending(o => o.Value).ToList();
                     orcListSorted[0].Value += 14;
-                    break;
-                case "Dark Elf":
-                    IncStat("INT", 2);
-                    IncStat("DEX", 1);
-                    IncStat("WIS", 1);
-                    List<StatData> darkElfList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[6], CombatSkills[7], CombatSkills[10], CombatSkills[11] };
-                    List<StatData> darkElfListSorted = darkElfList.OrderByDescending(o => o.Value).ToList();
-                    darkElfListSorted[0].Value += 10;
-                    break;
-                case "Floran":
-                    IncStat("DEX", 2);
-                    IncStat("END", 2);
-                    IncStat("CHR", -1);
-                    IncStat("INT", -1);
-                    ElementType = "Plant";
-                    List<StatData> floranList = new List<StatData> { CombatSkills[5], CombatSkills[8], CombatSkills[9], CombatSkills[10], CombatSkills[11], CombatSkills[12] };
-                    List<StatData> floranListSorted = floranList.OrderByDescending(o => o.Value).ToList();
-                    floranListSorted[0].Value += 14;
-                    break;
-                case "Dragonborn":
-                    IncStat("STR", 2);
-                    IncStat("END", 2);
-                    IncStat("INT", 2);
-                    IncStat("WIS", 2);
-                    IncStat("CHR", 2);
-                    IncStat("Persuasion", r.Next(0, 10));
-                    IncStat("Performance", r.Next(0, 10));
-                    LVL += 15;
-                    List<StatData> DragonList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                    List<StatData> DragonSortedList = DragonList.OrderByDescending(o => o.Value).ToList();
-                    DragonSortedList[0].Value += 15;
-                    DragonList.Clear();
-                    DragonList.Add(CombatSkills[14]); DragonList.Add(CombatSkills[15]); DragonList.Add(CombatSkills[16]); DragonList.Add(CombatSkills[17]);
-                    DragonSortedList.Clear(); DragonSortedList = DragonList.OrderByDescending(o => o.Value).ToList();
-                    DragonSortedList[0].Value += 15;
-                    break;
-                case "Void Elf":
-                    IncStat("DEX", 2);
-                    IncStat("WIS", 2);
-                    IncStat("INT", 2);
-                    IncStat("CHR", 2);
-                    IncStat("Persuasion", r.Next(0, 10));
-                    IncStat("Performance", r.Next(0, 10));
-                    ElementType = "Void";
-                    LVL += 15;
-                    List<StatData> VoidList = new List<StatData> { CombatSkills[1], CombatSkills[2], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                    List<StatData> VoidSortedList = VoidList.OrderByDescending(o => o.Value).ToList();
-
-                    for (int i = 0; i < 2; i++) VoidSortedList[i].Value += 10;
-                    VoidList.Clear();
-                    VoidList.Add(CombatSkills[8]); VoidList.Add(CombatSkills[9]); VoidList.Add(CombatSkills[10]); VoidList.Add(CombatSkills[11]);
-                    VoidSortedList.Clear(); VoidSortedList = VoidList.OrderByDescending(o => o.Value).ToList();
-                    VoidSortedList[0].Value += 10;
-                    break;
-                case "Demonborn":
-                    IncStat("DEX", 2);
-                    IncStat("STR", 2);
-                    IncStat("END", 2);
-                    IncStat("CHR", 2);
-                    IncStat("Persuasion", r.Next(0, 10));
-                    IncStat("Performance", r.Next(0, 10));
-                    LVL += 15;
-                    List<StatData> DemonList = new List<StatData> { CombatSkills[8], CombatSkills[10], CombatSkills[11], CombatSkills[12], CombatSkills[13], CombatSkills[14], CombatSkills[15], CombatSkills[16], CombatSkills[17] };
-                    List<StatData> DemonSortedList = DemonList.OrderByDescending(o => o.Value).ToList();
-                    DemonSortedList[0].Value += 30;
-                    break;
-                case "Metalborn":
-                    IncStat("STR", 2);
-                    IncStat("END", 3);
-                    IncStat("Block", r.Next(0, 15));
-                    for (int i = 0; i < 8; i++)
-                        CombatSkills[i].Value = 0;
-                    LVL += 15;
-                    SP_MOD = maxMP;
-                    MP_MOD = maxMP*-1;
-                    ElementType = "Steel";
-                    List<StatData> MetalList = new List<StatData> { CombatSkills[8], CombatSkills[10], CombatSkills[14], CombatSkills[15], CombatSkills[16], CombatSkills[17] };
-                    foreach (StatData s in MetalList) s.Value += 30;
-                    break;
-                case "Ascended":
-                    IncStat("CHR", 15);
-                    LVL += 20;
-                    List<StatData> AscendedList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                    List<StatData> AscendedSortedList = AscendedList.OrderByDescending(o => o.Value).ToList();
-
-                    switch (AscendedSortedList[0].Name)
-                    {
-                        case "Pyrokinetic":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[0].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[0].Value < 50) CombatSkills[0].Value = 50; else if (CombatSkills[0].Value > 100) CombatSkills[0].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Fire";
-                            Attributes[0].Value += 30; Attributes[1].Value += 30; CombatSkills[11].Value += r.Next(10, 30); CombatSkills[14].Value += r.Next(10, 30);
-                            CombatSkills[r.Next(15, 18)].Value += r.Next(10, 30);
-                            /*CivilSkills[0].Value += r.Next(10, 30); CivilSkills[2].Value += r.Next(5, 15); CivilSkills[1].Value += r.Next(5, 15);*/
-                            break;
-                        case "Aerotheurge":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[1].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[1].Value < 50) CombatSkills[1].Value = 50; else if (CombatSkills[1].Value > 100) CombatSkills[1].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Storm";
-                            Attributes[1].Value += 30; Attributes[3].Value += 30; CombatSkills[11].Value += r.Next(10, 30); CombatSkills[8].Value += r.Next(10, 30);
-                            CombatSkills[r.Next(8, 13)].Value += r.Next(10, 30);
-                            /*CivilSkills[3].Value += r.Next(10, 30); CivilSkills[7].Value += r.Next(10, 30); CivilSkills[9].Value += r.Next(10, 30);*/
-                            break;
-                        case "Hydrosophist":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[2].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[2].Value < 50) CombatSkills[2].Value = 50; else if (CombatSkills[2].Value > 100) CombatSkills[2].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Ice";
-                            Attributes[1].Value += 30; Attributes[4].Value += 30; CombatSkills[10].Value += r.Next(10, 30); CombatSkills[11].Value += r.Next(10, 30);
-                            CombatSkills[r.Next(8, 13)].Value += r.Next(10, 30);
-                            /*CivilSkills[4].Value += r.Next(10, 30); CivilSkills[6].Value += r.Next(10, 30); CivilSkills[10].Value += r.Next(10, 30);*/
-                            break;
-                        case "Geomagnetic":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[3].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[3].Value < 50) CombatSkills[3].Value = 50; else if (CombatSkills[3].Value > 100) CombatSkills[3].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Rock";
-                            Attributes[2].Value += 30; Attributes[4].Value += 30; CombatSkills[14].Value += r.Next(10, 30); CombatSkills[17].Value += r.Next(10, 30);
-                            CombatSkills[18].Value += r.Next(0, 30);
-                            /*CivilSkills[0].Value += r.Next(10, 30); CivilSkills[4].Value += r.Next(10, 30); CivilSkills[5].Value += r.Next(10, 30);*/
-                            break;
-                        case "PowerOfLight":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[4].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[4].Value < 50) CombatSkills[4].Value = 50; else if (CombatSkills[4].Value > 100) CombatSkills[4].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Light";
-                            Attributes[2].Value += 30; Attributes[4].Value += 30;
-                            /*CivilSkills[1].Value += r.Next(10, 30); CivilSkills[6].Value += r.Next(10, 30); CivilSkills[8].Value += r.Next(10, 30);*/
-                            break;
-                        case "ForceOfNature":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[5].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[5].Value < 50) CombatSkills[5].Value = 50; else if (CombatSkills[5].Value > 100) CombatSkills[5].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "nPlant";
-                            Attributes[1].Value += 30; Attributes[2].Value += 30; CombatSkills[14].Value += r.Next(10, 30); CombatSkills[11].Value += r.Next(10, 30);
-                            CombatSkills[10].Value += r.Next(10, 30);
-                            /*CivilSkills[0].Value += r.Next(10, 30); CivilSkills[5].Value += r.Next(10, 30); CivilSkills[7].Value += r.Next(10, 30);*/
-                            break;
-                        case "Entropy":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[6].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[6].Value < 50) CombatSkills[6].Value = 50; else if (CombatSkills[6].Value > 100) CombatSkills[6].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Void";
-                            Attributes[2].Value += 15; Attributes[4].Value += 30; Attributes[1].Value += 15;
-                            CombatSkills[11].Value += r.Next(10, 30); CombatSkills[10].Value += r.Next(10, 30); CombatSkills[12].Value += r.Next(10, 30);
-                            /*CivilSkills[3].Value += r.Next(10, 30); CivilSkills[6].Value += r.Next(10, 30); CivilSkills[10].Value += r.Next(10, 30);*/
-                            break;
-                        case "Psionics":
-                            AscendedSortedList.Remove(AscendedSortedList[0]);
-                            CombatSkills[7].Value += AscendedSortedList.Sum(x => x.Value);
-                            if (CombatSkills[7].Value < 50) CombatSkills[7].Value = 50; else if (CombatSkills[7].Value > 100) CombatSkills[7].Value = 100;
-                            foreach (StatData x in AscendedSortedList) x.Value = 0; ElementType = "Psy";
-                            Attributes[4].Value += 30; Attributes[5].Value += 30;
-                            CombatSkills[10].Value += r.Next(10, 30); CombatSkills[11].Value += r.Next(10, 30); CombatSkills[12].Value += r.Next(10, 30);
-                            /*CivilSkills[1].Value += r.Next(10, 30); CivilSkills[3].Value += r.Next(10, 30); CivilSkills[6].Value += r.Next(10, 30);*/
-                            break;
-                        default: break;
-                    }
-                    WP_MOD += Attributes[4].Value;
                     break;
                 default: break;
             }
@@ -1227,9 +1017,7 @@ namespace Unnamed
 
         public void GenerateRace()
         {
-            int raceID = (r.Next(0, 7) + r.Next(0, 7) + r.Next(0, 7)) / 3;
-            if (raceID==6) { raceID = r.Next(6, 11); }
-            Race = DefaultRaces[raceID];
+            Race = DefaultRaces[r.Next(0, 2)];
             SetRaceBonuces();
         }
 
@@ -1284,25 +1072,14 @@ namespace Unnamed
                     if (WizMagicSortedList[0].Value <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
                     else if (WizMagicSortedList[0].Value < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
                     else if (WizMagicSortedList[0].Value < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
-                    if (r.Next(0,2) == 0 && WizMagicSortedList[0].Value >= 20 && WizMagicSortedList[1].Value >= 20) {
+                    if (r.Next(0,2) == 0 && WizMagicSortedList[0].Value >= 40 && WizMagicSortedList[1].Value >= 40) {
                         Subclass = "Elementalist";
-                        if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 40)
+                        if (Stat("ShortBlade") >= 40)
                         {
                             Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
 
-                            if (Stat("Hydrosophist") >= 25) { MoveList.Add(Move.Find("Ice Dagger")); }
-                            if (Stat("Geomagnetic") >= 25) { MoveList.Add(Move.Find("Rock Dagger")); }
-                        }
-                        else if (Stat("Brawl") >= 40 && Stat("Brawl") > Stat("Stave"))
-                        {
-                            if (Stat("Pyrokinetic") >= 25) { MoveList.Add(Move.Find("Fire Punch")); }
-                            if (Stat("Aerotheurge") >= 25) { MoveList.Add(Move.Find("Static Punch")); }
-                            if (Stat("Hydrosophist") >= 25) { MoveList.Add(Move.Find("Water Punch")); }
-                            if (Stat("Geomagnetic") >= 25) { MoveList.Add(Move.Find("Earth Punch")); }
-                        }
-                        else if (Stat("Stave") >= 40 && Stat("Stave") > Stat("Brawl"))
-                        {
-                            Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
+                            if (Stat("Hydrosophist") >= 40) { MoveList.Add(Move.Find("Ice Dagger")); }
+                            if (Stat("Geomagnetic") >= 40) { MoveList.Add(Move.Find("Rock Dagger")); }
                         }
                         if (Stat("Pyrokinetic") >= 25) { MoveList.Add(Move.Find("Fire Blast")); }
                         if (Stat("Aerotheurge") >= 25) { MoveList.Add(Move.Find("Spark")); }
@@ -1314,56 +1091,32 @@ namespace Unnamed
                         {
                             case "Pyrokinetic":
                                 Subclass = "Pyromancer";
-                                if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 20)
+                                if (Stat("ShortBlade") >= 40)
                                 {
                                     Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                                 }
-                                else if (Stat("Brawl") >= 20 && Stat("Brawl") > Stat("Stave"))
-                                {
-                                    MoveList.Add(Move.Find("Fire Punch"));
-                                }
-                                else if (Stat("Stave") >= 20 && Stat("Stave") > Stat("Brawl"))
-                                {
-                                    Inventory.Add(new Item("Fire Staff", 225, 5, "DEX\nStave\ncSP -10\ncMP -4\ntHP -10\ntSP -4\nFire"));
-                                }
                                 MoveList.Add(Move.Find("Fire Blast"));
-                                if (Stat("Pyrokinetic") >= 25) MoveList.Add(Move.Find("Haste"));
-                                if (Stat("Pyrokinetic") >= 50) MoveList.Add(Move.Find("Explosion"));
+                                if (Stat("Pyrokinetic") >= 40) MoveList.Add(Move.Find("Haste"));
+                                if (Stat("Pyrokinetic") >= 60) MoveList.Add(Move.Find("Explosion"));
                                 break;
                             case "Aerotheurge":
                                 Subclass = "Stormcaller";
-                                if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 20)
+                                if (Stat("ShortBlade") >= 40)
                                 {
                                     Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                                 }
-                                else if (Stat("Brawl") >= 20 && Stat("Brawl") > Stat("Stave"))
-                                {
-                                    MoveList.Add(Move.Find("Static Punch"));
-                                }
-                                else if (Stat("Stave") >= 20 && Stat("Stave") > Stat("Brawl"))
-                                {
-                                    Inventory.Add(new Item("Lightning Staff", 225, 5, "DEX\nStave\ncSP -10\ncMP -4\ntHP -9\ntMP -5\nStorm"));
-                                }
                                 MoveList.Add(Move.Find("Spark"));
-                                if (Stat("Aerotheurge") >= 25) MoveList.Add(Move.Find("Windfury"));
-                                if (Stat("Aerotheurge") >= 50) MoveList.Add(Move.Find("Tailwind"));
+                                if (Stat("Aerotheurge") >= 40) MoveList.Add(Move.Find("Windfury"));
+                                if (Stat("Aerotheurge") >= 60) MoveList.Add(Move.Find("Tailwind"));
                                 break;
                             case "Hydrosophist":
                                 Subclass = "Cryomancer";
-                                if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 20)
+                                if (Stat("ShortBlade") >= 40)
                                 {
                                     Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                                     MoveList.Add(Move.Find("Ice Dagger"));
                                 }
-                                else if (Stat("Brawl") >= 20 && Stat("Brawl") > Stat("Stave"))
-                                {
-                                    MoveList.Add(Move.Find("Water Punch"));
-                                }
-                                else if (Stat("Stave") >= 20 && Stat("Stave") > Stat("Brawl"))
-                                {
-                                    Inventory.Add(new Item("Ice Staff", 225, 5, "DEX\nStave\ncSP -10\ncMP -4\ntHP -7\ntSP -7\nIce"));
-                                }
-                                if (Stat("Hydrosophist") >= 25)
+                                if (Stat("Hydrosophist") >= 40)
                                     if (r.Next(0, 2) == 0) MoveList.Add(Move.Find("Restoration"));
                                     else MoveList.Add(Move.Find("Mana Flow"));
                                 switch (r.Next(0, 3))
@@ -1379,26 +1132,18 @@ namespace Unnamed
                                         break;
                                     default: break;
                                 }
-                                if (Stat("Hydrosophist") >= 50) MoveList.Add(Move.Find("Blizzard"));
+                                if (Stat("Hydrosophist") >= 60) MoveList.Add(Move.Find("Blizzard"));
                                 break;
                             case "Geomagnetic":
                                 Subclass = "Geomancer";
-                                if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 20)
+                                if (Stat("ShortBlade") >= 40)
                                 {
                                     Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                                     MoveList.Add(Move.Find("Rock Dagger"));
                                 }
-                                else if (Stat("Brawl") >= 20 && Stat("Brawl") > Stat("Stave"))
-                                {
-                                    MoveList.Add(Move.Find("Earth Punch"));
-                                }
-                                else if (Stat("Stave") >= 20 && Stat("Stave") > Stat("Brawl"))
-                                {
-                                    Inventory.Add(new Item("Rock Staff", 225, 5, "DEX\nStave\ncSP -10\ncMP -4\ntHP -10\ntSP -4\nRock"));
-                                }
                                 MoveList.Add(Move.Find("Rock Throw"));
-                                if (Stat("Hydrosophist") >= 25) MoveList.Add(Move.Find("Earth Strike"));
-                                if (Stat("Hydrosophist") >= 50) MoveList.Add(Move.Find("Impalement"));
+                                if (Stat("Hydrosophist") >= 40) MoveList.Add(Move.Find("Earth Strike"));
+                                if (Stat("Hydrosophist") >= 60) MoveList.Add(Move.Find("Impalement"));
                                 break;
                             default: break;
                         }
@@ -1407,85 +1152,53 @@ namespace Unnamed
                 case "Priest":
                     Subclass = "Priest";
                     Inventory.Add(new Item("Robe of innocence", 125, 1, "MPR +6\nWPR +4"));
-                    if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 35)
+                    if (Stat("ShortBlade") >= 40)
                     {
                         Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
-                    }
-                    else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
-                    {
-                        MoveList.Add(Move.Find("Dazzling Punch"));
-                    }
-                    else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
-                    {
-                        Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
                     }
                     if (Stat("PowerOfLight") >= 20)
                     {
                         MoveList.Add(Move.Find("Dazzling Light"));
                         MoveList.Add(Move.Find("Small Heal"));
-                        if (Stat("PowerOfLight") >= 40) MoveList.Add(Move.Find("Mass Heal"));
-                        if (Stat("PowerOfLight") >= 50) MoveList.Add(Move.Find("Dazzling Flash"));
+                        if (Stat("PowerOfLight") >= 50) MoveList.Add(Move.Find("Mass Heal"));
+                        if (Stat("PowerOfLight") >= 75) MoveList.Add(Move.Find("Dazzling Flash"));
                     };
                     break;
                 case "Druid":
                     Inventory.Add(new Item("Green Wear", 75, 1, "SPR +3\nMPR +3"));
                     Subclass = "Druid";
 
-                    if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 35)
+                    if (Stat("ShortBlade") >= 40)
                     {
                         Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                         MoveList.Add(Move.Find("Claw Cut"));
                     }
-                    else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
-                    {
-                        MoveList.Add(Move.Find("Bestial Punch"));
-                    }
-                    else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
-                    {
-                        Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
-                        MoveList.Add(Move.Find("Vine Staff"));
-                    }
                     switch(r.Next(0,5))
                     {
                         case 0:
-                            if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Claws"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Summon Wolf"));
-                            if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Wild Fury"));
-                            break;
-                        case 1:
                             if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Razor feather"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Raven strike"));
                             if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Feather wave"));
                             break;
-                        case 2:
+                        case 1:
                             if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Thorn shot"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Insect strike"));
                             if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Thorns wave"));
                             break;
-                        case 3:
+                        case 2:
                             if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Poison shot"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Summon Giant Spider"));
                             if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Web"));
                             break;
-                        case 4:
+                        case 3:
                             if (Stat("ForceOfNature") >= 20) MoveList.Add(Move.Find("Poison Spores"));
-                            if (Stat("ForceOfNature") >= 30) MoveList.Add(Move.Find("Create Mushroom"));
                             if (Stat("ForceOfNature") >= 40) MoveList.Add(Move.Find("Pheromone Spores"));
                             break;
-                        default: break; //+ roots/vines, snakes, butterfly
+                        default: break;
                     }
-                    switch (r.Next(0, 4))
+                    switch (r.Next(0, 2))
                     {
                         case 0:
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case 1:
-                            MoveList.Add(Move.Find("Venom shot"));
-                            break;
-                        case 2:
-                            MoveList.Add(Move.Find("Pheromone Strike"));
-                            break;
-                        case 3:
                             MoveList.Add(Move.Find("Razor Leafs"));
                             break;
                         default: break;
@@ -1495,7 +1208,7 @@ namespace Unnamed
                     Subclass = "Witch Blade";
                     if (r.Next(0,2)==0) Inventory.Add(new Item("Hide Armor", 75, 7, "PA +12"));
                     else Inventory.Add(new Item("Studded Leather Armor", 338, 10, "PA +18"));
-                    List<StatData> WBSkillList = new List<StatData> { CombatSkills[15], CombatSkills[16], CombatSkills[17] };
+                    List<StatData> WBSkillList = new List<StatData> { CombatSkills[12], CombatSkills[13], CombatSkills[14] };
                     List<StatData> WBSkillSortedList = WBSkillList.OrderByDescending(o => o.Value).ToList();
                     switch (WBSkillSortedList[0].Name)
                     {
@@ -1544,22 +1257,10 @@ namespace Unnamed
                 case "Warrior":
                     if (r.Next(0,2)==0||Class=="Barbarian") Inventory.Add(new Item("Hide Armor", 75, 7, "PA +12"));
                     else Inventory.Add(new Item("Studded Leather Armor", 338, 10, "PA +18"));
-                    List<StatData> WarSkillList = new List<StatData> { CombatSkills[13], CombatSkills[15], CombatSkills[16], CombatSkills[17] };
+                    List<StatData> WarSkillList = new List<StatData> { CombatSkills[12], CombatSkills[13], CombatSkills[14] };
                     List<StatData> WarSkillSortedList = WarSkillList.OrderByDescending(o => o.Value).ToList();
                     switch (WarSkillSortedList[0].Name)
                     {
-                        case "Polearms":
-                            Subclass = "Polearmer";
-                            List<Item> polearms = new List<Item>
-                            {
-                                new Item("Lance", 64, 7, "STR\nPolearms\ncSP -8\ntHP -8"),
-                                new Item("Longspear", 68, 8, "STR\nPolearms\ncSP -9\ntHP -9"),
-                                new Item("Naginata", 68, 9, "STR\nPolearms\ncSP -11\ntHP -11"),
-                                new Item("Halberd", 75, 10, "STR\nPolearms\ncSP -15\ntHP -14\ntSP -1"),
-                                new Item("Tonbogiri", 125, 17, "STR\nPolearms\ncSP -26\ntHP -26")
-                            };
-                            Inventory.Add(polearms[r.Next(0, 5)]);
-                            break;
                         case "LongBlade":
                             Subclass = "Swordsman";
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 17 <= 0)
@@ -1640,60 +1341,28 @@ namespace Unnamed
                     if (Stat("Entropy") <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
                     else if (Stat("Entropy") < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
                     else if (Stat("Entropy") < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
-                    if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 35)
+                    if (Stat("ShortBlade") >= 40)
                     {
                         Inventory.Add(new Item("Sacrificial Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -6\ntHP -3\nDrain\nSteel"));
                     }
-                    else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
-                    {
-                        MoveList.Add(Move.Find("Void Punch"));
-                        MoveList.Add(Move.Find("Draining Claws"));
-                    }
-                    else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
-                    {
-                        Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
-                    }
-                    if (Stat("Entropy") >= 25) MoveList.Add(Move.Find("Life Tap"));
-                    if (Stat("Entropy") >= 50)
-                        switch(r.Next(0,3))
-                        {
-                            case 0:
-                                MoveList.Add(Move.Find("Ghost call"));
-                                break;
-                            case 1:
-                                MoveList.Add(Move.Find("Raise Skeleton"));
-                                break;
-                            case 2:
-                                MoveList.Add(Move.Find("Raise Zombie"));
-                                break;
-                            default: break;
-                        }
+                    if (Stat("Entropy") >= 40) MoveList.Add(Move.Find("Life Tap"));
                     MoveList.Add(Move.Find("Shadow Blast"));
                     MoveList.Add(Move.Find("Drain Life"));
                     break;
-                case "Whisperer":
                 case "Psionic":
                     Subclass = "Psionic";
                     if (Stat("Psionic") <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
                     else if (Stat("Psionic") < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
                     else if (Stat("Psionic") < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
-                    if (Stat("ShortBlade") > Stat("Brawl") && Stat("ShortBlade") > Stat("Stave") && Stat("ShortBlade") >= 35)
+                    if (Stat("ShortBlade") >= 40)
                     {
                         Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
                         MoveList.Add(Move.Find("Psy Blade"));
                     }
-                    else if (Stat("Brawl") >= 35 && Stat("Brawl") > Stat("Stave"))
-                    {
-                        MoveList.Add(Move.Find("Will Smash"));
-                    }
-                    else if (Stat("Stave") >= 35 && Stat("Stave") > Stat("Brawl"))
-                    {
-                        Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -10\ntHP -3\ntSP -7"));
-                    }
                     MoveList.Add(Move.Find("Psy Blast"));
-                    if (Stat("Psionics") >= 30 && r.Next(0,2)==0) MoveList.Add(Move.Find("Paralyse"));
-                    if (Stat("Psionics") >= 40) MoveList.Add(Move.Find("Will Break"));
-                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Psy Storm"));
+                    if (Stat("Psionics") >= 40 && r.Next(0,2)==0) MoveList.Add(Move.Find("Paralyse"));
+                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Will Break"));
+                    if (Stat("Psionics") >= 60) MoveList.Add(Move.Find("Psy Storm"));
                     break;
                 case "Sniper":
                 case "Witch Hunter":
@@ -1800,126 +1469,34 @@ namespace Unnamed
                     break;
                 case "Monk":
                     Subclass = "Monk";
-                    if (Stat("Stave")>Stat("Brawl")) { Inventory.Add(new Item("Staff", 25, 5, "DEX\nStave\ncSP -6\ntHP -3\ntSP -3")); }
                     List<StatData> MonkMagicList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
                     List<StatData> MonkMagicSortedList = MonkMagicList.OrderByDescending(o => o.Value).ToList();
-                    if (MonkMagicSortedList[0].Value >= 30)
+                    if (MonkMagicSortedList[0].Value >= 40)
                     switch (MonkMagicSortedList[0].Name)
                     {
                         case "Pyrokinetic":
-                            if (Stat("Stave") < Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Fire Punch"));
-                            }
                             MoveList.Add(Move.Find("Fire Blast"));
                             break;
                         case "Aerotheurge":
-                            if (Stat("Stave") < Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Static Punch"));
-                            }
                             MoveList.Add(Move.Find("Spark"));
                             break;
                         case "Hydrosophist":
-                            if (Stat("Stave") > Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Ice Staff"));
-                            }
-                            else
-                            {
-                                MoveList.Add(Move.Find("Water Punch"));
-                            }
                             MoveList.Add(Move.Find("Ice Shard"));
                             break;
                         case "Geomagnetic":
-                            if (Stat("Stave") > Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Rock Staff"));
-                            }
-                            else
-                            {
-                                MoveList.Add(Move.Find("Earth Punch"));
-                            }
                             MoveList.Add(Move.Find("Rock Throw"));
                             break;
                         case "PowerOfLight":
-                            if (Stat("Stave") < Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Dazzling Punch"));
-                            }
                             MoveList.Add(Move.Find("Small Heal"));
                             break;
                         case "ForceOfNature":
-                            if (Stat("Stave") < Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Bestial Punch"));
-                            }
-                            MoveList.Add(Move.Find("Living Roots"));
-                            break;
-                        case "Entropy":
-                            if (Stat("Stave") < Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Entropic Punch"));
-                                MoveList.Add(Move.Find("Draining Punch"));
-                            }
-                            MoveList.Add(Move.Find("Shadow Blast"));
-                            break;
-                        case "Psionics":
-                            if (Stat("Stave") > Stat("Brawl"))
-                            {
-                                MoveList.Add(Move.Find("Psionic Staff"));
-                            }
-                            else
-                            {
-                                MoveList.Add(Move.Find("Will Smash"));
-                            }
-                            if (Stat("Psionics") >= 30) MoveList.Add(Move.Find("Will Break"));
-                            MoveList.Add(Move.Find("Psy Blast"));
-                            break;
-                        default: break;
-                    }
-                    break;
-                case "Trapper":
-                    Subclass = "Trapper";
-                    Inventory.Add(new Item("Padded Armor", 45, 3, "PA +4"));
-                    Inventory.Add(new Item("Whip", 35, 4, "DEX\nWhip\ncSP -15\ntSP -6\ntWP -6\ntHP -3"));
-                    List<StatData> TrapperMagicList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                    List<StatData> TrapperMagicSortedList = TrapperMagicList.OrderByDescending(o => o.Value).ToList();
-                    if (TrapperMagicSortedList[0].Value >= 40)
-                    switch (TrapperMagicSortedList[0].Name)
-                    {
-                        case "Pyrokinetic":
-                            MoveList.Add(Move.Find("Fire Whip"));
-                            MoveList.Add(Move.Find("Fire Blast"));
-                            break;
-                        case "Aerotheurge":
-                            MoveList.Add(Move.Find("Storm Whip"));
-                            MoveList.Add(Move.Find("Spark"));
-                            break;
-                        case "Hydrosophist":
-                            if (r.Next(0, 2) == 0) MoveList.Add(Move.Find("Water Whip"));
-                            else MoveList.Add(Move.Find("Ice Whip"));
-                            MoveList.Add(Move.Find("Ice Shard"));
-                            break;
-                        case "Geomagnetic":
-                            MoveList.Add(Move.Find("Rock Whip"));
-                            MoveList.Add(Move.Find("Rock Throw"));
-                            break;
-                        case "PowerOfLight":
-                            MoveList.Add(Move.Find("Holy Whip"));
-                            MoveList.Add(Move.Find("Dazzling Light"));
-                            MoveList.Add(Move.Find("Small Heal"));
-                            break;
-                        case "ForceOfNature":
-                            MoveList.Add(Move.Find("Vine Whip"));
                             MoveList.Add(Move.Find("Living Roots"));
                             break;
                         case "Entropy":
                             MoveList.Add(Move.Find("Shadow Blast"));
                             break;
                         case "Psionics":
-                            MoveList.Add(Move.Find("Psy Whip"));
-                            if (Stat("Psionics") >= 30) MoveList.Add(Move.Find("Will Break"));
+                            if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Will Break"));
                             MoveList.Add(Move.Find("Psy Blast"));
                             break;
                         default: break;
@@ -1983,134 +1560,6 @@ namespace Unnamed
                         default: break;
                     }
                     break;
-                case "Bard":
-                    if (Stat("Persuasion") > Stat("Performance"))
-                    {
-                        Subclass = "Mediator";
-                        MoveList.Add(Move.Find("Distracting talk"));
-                        MoveList.Add(Move.Find("Seducting speech"));
-                        MoveList.Add(Move.Find("Battle cry"));
-                    } else
-                    {
-                        if (r.Next(0, 2) == 0 || Stat("DEX") < 10)
-                        {
-                            Subclass = "Musician";
-                            List<Item> musicians = new List<Item>
-                            {
-                                new Item("Euphonium", 500, 14, "CHR\nPerformance\ncSP -12\ntaWP -4\nPsy"),
-                                new Item("Castanets", 20, 0.01, "CHR\nPerformance\ncSP -6\ntaSP -2\nPsy"),
-                                new Item("Harp", 650, 11, "CHR\nPerformance\ncSP -12\ntaWP -4\nPsy"),
-                                new Item("Hurdy-Gurdy", 300, 4.5, "CHR\nPerformance\ncSP -12\ncaSP +4\ncaWP +2\ntaSP +2\nPsy"),
-                                new Item("Violin", 350, 1.5, "CHR\nPerformance\ncSP -9\ntaSP -3\nPsy"),
-                                new Item("Mountain Dulcimer", 80, 1.4, "CHR\nPerformance\ncSP -9\ncaHP +3\nPsy"),
-                                new Item("Sousaphone", 200, 9, "CHR\nPerformance\ncSP -12\ntaSP -2\ntaWP -2\nPsy")
-                            };
-                            Inventory.Add(musicians[r.Next(0, musicians.Count())]);
-                        }
-                        else
-                        {
-                            Subclass = "Dancer";
-                            MoveList.Add(Move.Find("Flirtatious Wink"));
-                            MoveList.Add(Move.Find("Luring Dance"));
-                            if (Stat("DEX") >= 16) MoveList.Add(Move.Find("Out With a Bang"));
-                            List<StatData> BardDanceList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                            List<StatData> BardDanceSortedList = BardDanceList.OrderByDescending(o => o.Value).ToList();
-                            if (BardDanceSortedList[0].Value >= 35)
-                                switch (BardDanceSortedList[0].Name)
-                                {
-                                    case "Pyrokinetic":
-                                        MoveList.Add(Move.Find("Dancing Flames"));
-                                        break;
-                                    case "Aerotheurge":
-                                        MoveList.Add(Move.Find("Sparkling Dance"));
-                                        break;
-                                    case "Hydrosophist":
-                                        MoveList.Add(Move.Find("Frosty Dance"));
-                                        break;
-                                    case "Geomagnetic":
-                                        MoveList.Add(Move.Find("Dancing earth"));
-                                        break;
-                                    case "PowerOfLight":
-                                        MoveList.Add(Move.Find("Dancing Lights"));
-                                        break;
-                                    case "ForceOfNature":
-                                        MoveList.Add(Move.Find("Dancing roots"));
-                                        break;
-                                    case "Entropy":
-                                        MoveList.Add(Move.Find("Draining Bachata"));
-                                        break;
-                                    case "Psionics":
-                                        MoveList.Add(Move.Find("Flamenco"));
-                                        break;
-                                    default: break;
-                                }
-                        }
-                    }
-                    if (Stat("ShortBlade") >= 20)
-                    {
-                        Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
-                    }
-                    if (Stat("Whip") >= 20)
-                    {
-                        Inventory.Add(new Item("Whip", 35, 4, "DEX\nWhip\ncSP -15\ntSP -12\ntWP -3"));
-                    }
-                    if (Stat("Accuracy") >= 20)
-                    {
-                        switch (r.Next(0, 4))
-                        {
-                            case 0:
-                                Inventory.Add(new Item("Short Bow", 70, 9, "DEX\nAccuracy\ncSP -10\ntHP -10\nUses Arrow"));
-                                Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
-                                break;
-                            case 1:
-                                Inventory.Add(new Item("Long Bow", 80, 11, "DEX\nAccuracy\ncSP -12\ntHP -12\nUses Arrow"));
-                                Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
-                                break;
-                            case 2:
-                                Inventory.Add(new Item("Hand Crossbow", 60, 7, "DEX\nAccuracy\ncSP -8\ntHP -8\nUses Bolt(Small)"));
-                                Inventory.Add(new Item("Bolt(Small)", 1, 0.23, 20, "DEX\nShortBlade\ncSP -3\ntHP -3"));
-                                break;
-                            case 3:
-                                Inventory.Add(new Item("Crossbow", 90, 14, "DEX\nAccuracy\ncSP -14\ntHP -14\nUses Bolt(Medium)"));
-                                Inventory.Add(new Item("Bolt(Medium)", 1, 0.45, 20, "DEX\nShortBlade\ncSP -5\ntHP -5"));
-                                break;
-                            default: break;
-                        }
-                    }
-                    List<StatData> BardMagicList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
-                    List<StatData> BardMagicSortedList = BardMagicList.OrderByDescending(o => o.Value).ToList();
-                    if (BardMagicSortedList[0].Value >= 35)
-                        switch (BardMagicSortedList[0].Name)
-                        {
-                            case "Pyrokinetic":
-                                MoveList.Add(Move.Find("Fire Blast"));
-                                break;
-                            case "Aerotheurge":
-                                MoveList.Add(Move.Find("Spark"));
-                                break;
-                            case "Hydrosophist":
-                                MoveList.Add(Move.Find("Ice Shard"));
-                                break;
-                            case "Geomagnetic":
-                                MoveList.Add(Move.Find("Rock Throw"));
-                                break;
-                            case "PowerOfLight":
-                                MoveList.Add(Move.Find("Dazzling Light"));
-                                MoveList.Add(Move.Find("Small Heal"));
-                                break;
-                            case "ForceOfNature":
-                                MoveList.Add(Move.Find("Living Roots"));
-                                break;
-                            case "Entropy":
-                                MoveList.Add(Move.Find("Shadow Blast"));
-                                break;
-                            case "Psionics":
-                                if (Stat("Psionics") >= 30) MoveList.Add(Move.Find("Will Break"));
-                                MoveList.Add(Move.Find("Psy Blast"));
-                                break;
-                            default: break;
-                        }
-                    break;
                 default: break;
             }
             if (WeightMod > 1.0) {
@@ -2118,53 +1567,11 @@ namespace Unnamed
                 else if (maxCarryWeight - carryWeight + 30 >= 0) Inventory.Add(new Item("Medium Backpack", 80, 3, "CW +30"));
                 else Inventory.Add(new Item("Large Backpack", 100, 3, "CW +45"));
             }
-            
-            switch (Race)
-            {
-                case "Dragonborn":
-                    MoveList.Add(Move.Find("Dragon Claw"));
-                    if (Stat("Pyrokinetic") >= 50) MoveList.Add(Move.Find("Fire Breath"));
-                    if (Stat("Aerotheurge") >= 50) MoveList.Add(Move.Find("Storm Breath"));
-                    if (Stat("Hydrosophist") >= 50) MoveList.Add(Move.Find("Ice Breath"));
-                    if (Stat("Geomagnetic") >= 50) MoveList.Add(Move.Find("Earth Wave"));
-                    if (Stat("PowerOfLight") >= 50) MoveList.Add(Move.Find("Regeneration"));
-                    if (Stat("ForceOfNature") >= 50) MoveList.Add(Move.Find("Poison Breath"));
-                    if (Stat("Entropy") >= 50) MoveList.Add(Move.Find("Deadly Breath"));
-                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Dragon Will"));
-                    break;
-                case "Void Elf":
-                    MoveList.Add(Move.Find("Void Touch"));
-                    if (Stat("Aerotheurge") >= 50) MoveList.Add(Move.Find("Void Storm"));
-                    if (Stat("Hydrosophist") >= 50) MoveList.Add(Move.Find("Absolute Zero"));
-                    if (Stat("ForceOfNature") >= 50) MoveList.Add(Move.Find("Void Thorns"));
-                    if (Stat("Entropy") >= 50) MoveList.Add(Move.Find("Absorb Life"));
-                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Void Embrace"));
-                    break;
-                case "Demonborn":
-                    MoveList.Add(Move.Find("Demon Claw"));
-                    break;
-                case "Metalborn":
-                    MoveList.Clear();
-                    MoveList.Add(Move.Find("Iron Fist"));
-                    break;
-                case "Ascended":
-                    if (Stat("Pyrokinetic") >= 50) MoveList.Add(Move.Find("Infernal Embrace"));
-                    if (Stat("Aerotheurge") >= 50) MoveList.Add(Move.Find("Ion Storm"));
-                    if (Stat("Hydrosophist") >= 50) MoveList.Add(Move.Find("Cold Embrace"));
-                    if (Stat("Geomagnetic") >= 50) MoveList.Add(Move.Find("Stone Rain"));
-                    if (Stat("PowerOfLight") >= 50) MoveList.Add(Move.Find("Regeneration"));
-                    if (Stat("ForceOfNature") >= 50) MoveList.Add(Move.Find("Wine Frenzy"));
-                    if (Stat("Entropy") >= 50) MoveList.Add(Move.Find("Hungry Tentacles"));
-                    if (Stat("Psionics") >= 50) MoveList.Add(Move.Find("Dominate Mind"));
-                    break;
-                default: break;
-            }
         }
 
         public void setSubclass()
         {
             List<StatData> list = new List<StatData>(CombatSkills);
-            list.Remove(list[18]); list.Remove(list[9]); 
             List<StatData> sortedList = list.OrderByDescending(o => o.Value).ToList();
             int i = 0;
             while (Class == null && i <= sortedList.Count)
@@ -2187,7 +1594,6 @@ namespace Unnamed
                     case "ForceOfNature":
                         Class = "Druid";
                         break;
-                    case "Polearms":
                     case "LongBlade":
                     case "BluntWeapon":
                     case "Axe":
@@ -2206,17 +1612,8 @@ namespace Unnamed
                     case "ShortBlade":
                         Class = "Rogue";
                         break;
-                    case "Stave":
                     case "Brawl":
                         Class = "Monk";
-                        break;
-                    case "Whip":
-                        Class = "Trapper";
-                        break;
-                    case "Persuasion":
-                    case "Performance":
-                        Class = "Bard";
-                        if (sortedList[i + 1].Name == "Psionics") Class = "Whisperer";
                         break;
                     default:
                         i++;
