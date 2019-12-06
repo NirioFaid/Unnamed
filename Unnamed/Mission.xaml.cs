@@ -245,18 +245,22 @@ namespace Unnamed
             double casterAHPmod, casterAMPmod, casterASPmod, casterAWPmod, targetAHPmod, targetAMPmod, targetASPmod, targetAWPmod;
             double HPdmg = 0, MPdmg = 0, SPdmg = 0, WPdmg = 0;
             double AHPdmg = 0, AMPdmg = 0, ASPdmg = 0, AWPdmg = 0;
-            Move selMove;
-            if (isAlly && allyMoves.SelectedItem != null)
+            Move selMove = null;
+            if (isAlly && (allyMoves.SelectedItem != null || allyItems.SelectedItem != null))
             {
                 caster = SelectedAlly; target = SelectedEnemy;
                 casterArea = AllyList; targetArea = EnemyList;
-                selMove = allyMoves.SelectedItem as Move;
+                if (allyMoves.SelectedItem != null) selMove = allyMoves.SelectedItem as Move;
+                else if ((allyItems.SelectedItem as Item).ItemMove != null) selMove = (allyItems.SelectedItem as Item).ItemMove;
+                else return;
             }
-            else if (!isAlly && enemyMoves.SelectedItem != null)
+            else if (!isAlly && (enemyMoves.SelectedItem != null || enemyItems.SelectedItem != null))
             {
                 caster = SelectedEnemy; target = SelectedAlly;
                 casterArea = EnemyList; targetArea = AllyList;
-                selMove = enemyMoves.SelectedItem as Move;
+                if (enemyMoves.SelectedItem != null) selMove = enemyMoves.SelectedItem as Move;
+                else if ((enemyItems.SelectedItem as Item).ItemMove != null) selMove = (enemyItems.SelectedItem as Item).ItemMove;
+                else return;
             }
             else { return; };
             atckType = selMove.Skill;
@@ -282,13 +286,16 @@ namespace Unnamed
             targetASPmod = selMove.taSP;
             targetAWPmod = selMove.taWP;
 
+            if (selMove.ConsumingItem != null) BufItem = caster.Inventory.FirstOrDefault(x => x.Name == selMove.ConsumingItem);
+            else BufItem = null;
+
             if (BufItem != null)
             {
                 if (BufItem.Stack > 1) BufItem.Stack--;
                 else if (isAlly) { SelectedAlly.Inventory.Remove(BufItem); allyItems.Items.Refresh(); }
                 else if (!isAlly) { SelectedEnemy.Inventory.Remove(BufItem); enemyItems.Items.Refresh(); }
             }
-            if (BufCraftItem != null)
+            /*if (BufCraftItem != null)
             {
                 caster.Inventory.Add(BufCraftItem);
                 Update();
@@ -298,7 +305,7 @@ namespace Unnamed
                 if (isAlly) AllyList.Add(BufSummon);
                 else EnemyList.Add(BufSummon);
                 Update();
-            }
+            }*/
 
             if (BufElementType==null)
             {
@@ -910,7 +917,8 @@ namespace Unnamed
 
         void InputItemMods(Item item, bool isAlly)
         {
-            //if (item != null) InputMods(item.Description, isAlly);
+            if (item != null && item.ItemMove != null) InputMods(item.ItemMove, isAlly);
+            else UnselectMoves();
         }
 
         private void enemyThrowButton_Click(object sender, RoutedEventArgs e)

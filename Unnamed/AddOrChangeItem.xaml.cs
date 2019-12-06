@@ -80,15 +80,15 @@ namespace Unnamed
                 mainwindow.addItem(itemName.Text, (int)itemCost.Value, 1, "");
             else mainwindow.replaceItem(oldItem, new Item (itemName.Text, (int)itemCost.Value, 1, ""), (int)itemCost.Value);
             if (storage != null) storage.updatePersonalItems();*/
-            switch (Mode)
+            /*switch (Mode)
             {
                 case "edit_move":
                     unit.MoveList.Where(x => x == move).FirstOrDefault().Name = itemName.Text;
                     unit.MoveList.Where(x => x == move).FirstOrDefault().Descr = new TextRange(descr.Document.ContentStart, descr.Document.ContentEnd).Text.Replace("\r", "").TrimEnd('\n');
                     break;
-                /*case "new_move":
+                case "new_move":
                     unit.MoveList.Add(new Move(itemName.Text, new TextRange(descr.Document.ContentStart, descr.Document.ContentEnd).Text.Replace("\r", "").TrimEnd('\n')));
-                    break;*/
+                    break;
                 case "edit_item":
                     unit.Inventory.Where(x => x == item).FirstOrDefault().Name = itemName.Text;
                     unit.Inventory.Where(x => x == item).FirstOrDefault().Description = new TextRange(descr.Document.ContentStart, descr.Document.ContentEnd).Text.Replace("\r", "").TrimEnd('\n');
@@ -104,6 +104,7 @@ namespace Unnamed
             }
             if (charwindow!=null) charwindow.shake();
             Close();
+            */
         }
     }
 }

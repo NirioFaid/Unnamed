@@ -852,6 +852,12 @@ namespace Unnamed
                     break;
             }
         }
+        /*
+         * 1) Сделать так чтобы зелья тоже использовались
+         * 2) Запилить систему инвентаря/экипировки
+         * 3) Починить систему генерации персонажей/умений и т.п.
+         * 4) Добавить проверку на отсутствие необходимого предмета с возвратом
+         * */
 
         public void generateUnitData()
         {
@@ -881,14 +887,14 @@ namespace Unnamed
             CombatSkills.Add(new StatData("Entropy", r.Next((Stat("WIS") + Stat("INT")) / 2, (Stat("WIS") + Stat("INT"))*5 / 2)));//6
             CombatSkills.Add(new StatData("Psionics", r.Next((Stat("WIS") + Stat("CHR")) / 2, (Stat("WIS") + Stat("CHR"))*5 / 2)));//7
 
-            CombatSkills.Add(new StatData("Accuracy", r.Next(Stat("DEX"), Stat("DEX")*5)));//8
+            CombatSkills.Add(new StatData("SharpShooting", r.Next(Stat("DEX"), Stat("DEX")*5)));//8
             CombatSkills.Add(new StatData("Throwing", r.Next(Stat("DEX"), Stat("DEX")*5)));//9
             CombatSkills.Add(new StatData("ShortBlade", r.Next(Stat("DEX"), Stat("DEX")*5)));//10
 
             CombatSkills.Add(new StatData("Brawl", r.Next(Stat("STR"), Stat("STR")*5)));//11
-            CombatSkills.Add(new StatData("LongBlade", r.Next(Stat("STR"), Stat("STR")*5)));//12
+            CombatSkills.Add(new StatData("Sword", r.Next(Stat("STR"), Stat("STR")*5)));//12
             CombatSkills.Add(new StatData("Axe", r.Next(Stat("STR"), Stat("STR")*5)));//13
-            CombatSkills.Add(new StatData("BluntWeapon", r.Next(Stat("STR"), Stat("STR")*5)));//14
+            CombatSkills.Add(new StatData("Blunt", r.Next(Stat("STR"), Stat("STR")*5)));//14
 
             Coins = r.Next(0, Cost / 2);
             if (Race == null) GenerateRace();
@@ -1069,14 +1075,14 @@ namespace Unnamed
                 case "Wizard":
                     List<StatData> WizMagicList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3] };
                     List<StatData> WizMagicSortedList = WizMagicList.OrderByDescending(o => o.Value).ToList();
-                    if (WizMagicSortedList[0].Value <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
-                    else if (WizMagicSortedList[0].Value < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
-                    else if (WizMagicSortedList[0].Value < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
+                    if (WizMagicSortedList[0].Value <= 25) Inventory.Add(Item.Find("Novice Robe"));
+                    else if (WizMagicSortedList[0].Value < 50) Inventory.Add(Item.Find("Apprentice Robe"));
+                    else if (WizMagicSortedList[0].Value < 70) Inventory.Add(Item.Find("Adept Robe"));
                     if (r.Next(0,2) == 0 && WizMagicSortedList[0].Value >= 40 && WizMagicSortedList[1].Value >= 40) {
                         Subclass = "Elementalist";
                         if (Stat("ShortBlade") >= 40)
                         {
-                            Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                            Inventory.Add(Item.Find("Dagger"));
 
                             if (Stat("Hydrosophist") >= 40) { MoveList.Add(Move.Find("Ice Dagger")); }
                             if (Stat("Geomagnetic") >= 40) { MoveList.Add(Move.Find("Rock Dagger")); }
@@ -1093,7 +1099,7 @@ namespace Unnamed
                                 Subclass = "Pyromancer";
                                 if (Stat("ShortBlade") >= 40)
                                 {
-                                    Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                                    Inventory.Add(Item.Find("Dagger"));
                                 }
                                 MoveList.Add(Move.Find("Fire Blast"));
                                 if (Stat("Pyrokinetic") >= 40) MoveList.Add(Move.Find("Haste"));
@@ -1103,7 +1109,7 @@ namespace Unnamed
                                 Subclass = "Stormcaller";
                                 if (Stat("ShortBlade") >= 40)
                                 {
-                                    Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                                    Inventory.Add(Item.Find("Dagger"));
                                 }
                                 MoveList.Add(Move.Find("Spark"));
                                 if (Stat("Aerotheurge") >= 40) MoveList.Add(Move.Find("Windfury"));
@@ -1113,7 +1119,7 @@ namespace Unnamed
                                 Subclass = "Cryomancer";
                                 if (Stat("ShortBlade") >= 40)
                                 {
-                                    Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                                    Inventory.Add(Item.Find("Dagger"));
                                     MoveList.Add(Move.Find("Ice Dagger"));
                                 }
                                 if (Stat("Hydrosophist") >= 40)
@@ -1138,7 +1144,7 @@ namespace Unnamed
                                 Subclass = "Geomancer";
                                 if (Stat("ShortBlade") >= 40)
                                 {
-                                    Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                                    Inventory.Add(Item.Find("Dagger"));
                                     MoveList.Add(Move.Find("Rock Dagger"));
                                 }
                                 MoveList.Add(Move.Find("Rock Throw"));
@@ -1151,10 +1157,10 @@ namespace Unnamed
                     break;
                 case "Priest":
                     Subclass = "Priest";
-                    Inventory.Add(new Item("Robe of innocence", 125, 1, "MPR +6\nWPR +4"));
+                    Inventory.Add(Item.Find("Robe of innocence"));
                     if (Stat("ShortBlade") >= 40)
                     {
-                        Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                        Inventory.Add(Item.Find("Dagger"));
                     }
                     if (Stat("PowerOfLight") >= 20)
                     {
@@ -1165,12 +1171,12 @@ namespace Unnamed
                     };
                     break;
                 case "Druid":
-                    Inventory.Add(new Item("Green Wear", 75, 1, "SPR +3\nMPR +3"));
+                    Inventory.Add(Item.Find("Green Wear"));
                     Subclass = "Druid";
 
                     if (Stat("ShortBlade") >= 40)
                     {
-                        Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                        Inventory.Add(Item.Find("Dagger"));
                         MoveList.Add(Move.Find("Claw Cut"));
                     }
                     switch(r.Next(0,5))
@@ -1206,43 +1212,43 @@ namespace Unnamed
                     break;
                 case "Witch Blade":
                     Subclass = "Witch Blade";
-                    if (r.Next(0,2)==0) Inventory.Add(new Item("Hide Armor", 75, 7, "PA +12"));
-                    else Inventory.Add(new Item("Studded Leather Armor", 338, 10, "PA +18"));
+                    if (r.Next(0,2)==0) Inventory.Add(Item.Find("Hide Armor"));
+                    else Inventory.Add(Item.Find("Studded Leather Armor"));
                     List<StatData> WBSkillList = new List<StatData> { CombatSkills[12], CombatSkills[13], CombatSkills[14] };
                     List<StatData> WBSkillSortedList = WBSkillList.OrderByDescending(o => o.Value).ToList();
                     switch (WBSkillSortedList[0].Name)
                     {
-                        case "LongBlade":
+                        case "Sword":
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 17 <= 0)
                             {
-                                Inventory.Add(new Item("Sword", 70, 10, "STR\nLongBlade\ncSP -10\ntHP -10"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("Sword"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Greatsword", 140, 17, "STR\nLongBlade\ncSP -17\ntHP -17"));
+                                Inventory.Add(Item.Find("Greatsword"));
                             }
                             break;
-                        case "BluntWeapon":
+                        case "Blunt":
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 25 <= 0)
                             {
-                                Inventory.Add(new Item("Mace", 90, 14, "STR\nBluntWeapon\ncSP -14\ntHP -14"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("Mace"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Warhammer", 180, 25, "STR\nBluntWeapon\ncSP -25\ntHP -25"));
+                                Inventory.Add(Item.Find("Warhammer"));
                             }
                             break;
                         case "Axe":
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 21 <= 0)
                             {
-                                Inventory.Add(new Item("War Axe", 80, 12, "STR\nAxe\ncSP -12\ntHP -12"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("War Axe"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Battleaxe", 160, 21, "STR\nAxe\ncSP -21\ntHP -21"));
+                                Inventory.Add(Item.Find("Battleaxe"));
                             }
                             break;
                         default: break;
@@ -1255,46 +1261,46 @@ namespace Unnamed
                 case "Paladin":
                 case "Barbarian":
                 case "Warrior":
-                    if (r.Next(0,2)==0||Class=="Barbarian") Inventory.Add(new Item("Hide Armor", 75, 7, "PA +12"));
-                    else Inventory.Add(new Item("Studded Leather Armor", 338, 10, "PA +18"));
+                    if (r.Next(0,2)==0||Class=="Barbarian") Inventory.Add(Item.Find("Hide Armor"));
+                    else Inventory.Add(Item.Find("Studded Leather Armor"));
                     List<StatData> WarSkillList = new List<StatData> { CombatSkills[12], CombatSkills[13], CombatSkills[14] };
                     List<StatData> WarSkillSortedList = WarSkillList.OrderByDescending(o => o.Value).ToList();
                     switch (WarSkillSortedList[0].Name)
                     {
-                        case "LongBlade":
+                        case "Sword":
                             Subclass = "Swordsman";
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 17 <= 0)
                             {
-                                Inventory.Add(new Item("Sword", 70, 10, "STR\nLongBlade\ncSP -10\ntHP -10"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("Sword"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Greatsword", 140, 17, "STR\nLongBlade\ncSP -17\ntHP -17"));
+                                Inventory.Add(Item.Find("Greatsword"));
                             }
                             break;
-                        case "BluntWeapon":
+                        case "Blunt":
                             Subclass = "Smasher";
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 25 <= 0)
                             {
-                                Inventory.Add(new Item("Mace", 90, 14, "STR\nBluntWeapon\ncSP -14\ntHP -14"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("Mace"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Warhammer", 180, 25, "STR\nBluntWeapon\ncSP -25\ntHP -25"));
+                                Inventory.Add(Item.Find("Warhammer"));
                             }
                             break;
                         case "Axe":
                             Subclass = "Butcher";
                             if (r.Next(0, 2) == 0 || maxCarryWeight - carryWeight - 21 <= 0)
                             {
-                                Inventory.Add(new Item("War Axe", 80, 12, "STR\nAxe\ncSP -12\ntHP -12"));
-                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(new Item("Shield", 75, 7, "Chance to [Block] incoming attack"));
+                                Inventory.Add(Item.Find("War Axe"));
+                                if (r.Next(0, 2) == 0 || Class == "Paladin") Inventory.Add(Item.Find("Shield"));
                             }
                             else
                             {
-                                Inventory.Add(new Item("Battleaxe", 160, 21, "STR\nAxe\ncSP -21\ntHP -21"));
+                                Inventory.Add(Item.Find("Battleaxe"));
                             }
                             break;
                         default: break;
@@ -1338,12 +1344,12 @@ namespace Unnamed
                     break;
                 case "Warlock":
                     Subclass = "Warlock";
-                    if (Stat("Entropy") <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
-                    else if (Stat("Entropy") < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
-                    else if (Stat("Entropy") < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
+                    if (Stat("Entropy") <= 25) Inventory.Add(Item.Find("Novice Robe"));
+                    else if (Stat("Entropy") < 50) Inventory.Add(Item.Find("Apprentice Robe"));
+                    else if (Stat("Entropy") < 70) Inventory.Add(Item.Find("Adept Robe"));
                     if (Stat("ShortBlade") >= 40)
                     {
-                        Inventory.Add(new Item("Sacrificial Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -6\ntHP -3\nDrain\nSteel"));
+                        Inventory.Add(Item.Find("Sacrificial Dagger"));
                     }
                     if (Stat("Entropy") >= 40) MoveList.Add(Move.Find("Life Tap"));
                     MoveList.Add(Move.Find("Shadow Blast"));
@@ -1351,12 +1357,12 @@ namespace Unnamed
                     break;
                 case "Psionic":
                     Subclass = "Psionic";
-                    if (Stat("Psionic") <= 25) Inventory.Add(new Item("Novice Robe", 125, 2, "MA +6\nMPR +3"));
-                    else if (Stat("Psionic") < 50) Inventory.Add(new Item("Apprentice Robe", 350, 2, "MA +10\nMPR +5"));
-                    else if (Stat("Psionic") < 70) Inventory.Add(new Item("Adept Robe", 725, 2, "MA +14\nMPR +7"));
+                    if (Stat("Psionic") <= 25) Inventory.Add(Item.Find("Novice Robe"));
+                    else if (Stat("Psionic") < 50) Inventory.Add(Item.Find("Apprentice Robe"));
+                    else if (Stat("Psionic") < 70) Inventory.Add(Item.Find("Adept Robe"));
                     if (Stat("ShortBlade") >= 40)
                     {
-                        Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                        Inventory.Add(Item.Find("Dagger"));
                         MoveList.Add(Move.Find("Psy Blade"));
                     }
                     MoveList.Add(Move.Find("Psy Blast"));
@@ -1367,28 +1373,28 @@ namespace Unnamed
                 case "Sniper":
                 case "Witch Hunter":
                 case "Ranger":
-                    Inventory.Add(new Item("Leather Armor", 75, 5, "PA +8"));
+                    Inventory.Add(Item.Find("Leather Armor"));
                     switch (r.Next(0, 4))
                     {
                         case 0:
                             Subclass = "Archer";
-                            Inventory.Add(new Item("Short Bow", 70, 9, "DEX\nAccuracy\ncSP -10\ntHP -10\nUses Arrow"));
-                            Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
+                            Inventory.Add(Item.Find("Short Bow"));
+                            Inventory.Add(Item.Find("Arrow"));
                             break;
                         case 1:
                             Subclass = "Archer";
-                            Inventory.Add(new Item("Long Bow", 80, 11, "DEX\nAccuracy\ncSP -12\ntHP -12\nUses Arrow"));
-                            Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
+                            Inventory.Add(Item.Find("Long Bow"));
+                            Inventory.Add(Item.Find("Arrow"));
                             break;
                         case 2:
                             Subclass = "Arbalester";
-                            Inventory.Add(new Item("Hand Crossbow", 60, 7, "DEX\nAccuracy\ncSP -8\ntHP -8\nUses Bolt(Small)"));
-                            Inventory.Add(new Item("Bolt(Small)", 1, 0.23, 20, "DEX\nShortBlade\ncSP -3\ntHP -3"));
+                            Inventory.Add(Item.Find("Hand Crossbow"));
+                            Inventory.Add(Item.Find("Bolt(Small)"));
                             break;
                         case 3:
                             Subclass = "Arbalester";
-                            Inventory.Add(new Item("Crossbow", 90, 14, "DEX\nAccuracy\ncSP -14\ntHP -14\nUses Bolt(Medium)"));
-                            Inventory.Add(new Item("Bolt(Medium)", 1, 0.45, 20, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                            Inventory.Add(Item.Find("Crossbow"));
+                            Inventory.Add(Item.Find("Bolt(Medium)"));
                             break;
                         default: break;
                     }
@@ -1428,8 +1434,8 @@ namespace Unnamed
                     break;
                 case "Rogue":
                     Subclass = "Rogue";
-                    Inventory.Add(new Item("Leather Armor", 75, 5, "PA +8"));
-                    Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                    Inventory.Add(Item.Find("Leather Armor"));
+                    Inventory.Add(Item.Find("Dagger"));
                     List<StatData> RogueMagicList = new List<StatData> { CombatSkills[0], CombatSkills[1], CombatSkills[2], CombatSkills[3], CombatSkills[4], CombatSkills[5], CombatSkills[6], CombatSkills[7] };
                     List<StatData> RogueMagicSortedList = RogueMagicList.OrderByDescending(o => o.Value).ToList();
                     if (RogueMagicSortedList[0].Value >= 40)
@@ -1504,37 +1510,33 @@ namespace Unnamed
                     break;
                 case "Thief":
                     Subclass = "Thief";
-                    if (r.Next(0,2)==0) Inventory.Add(new Item("Leather Armor", 75, 5, "PA +8"));
-                    if (Stat("Accuracy") >= 20)
+                    if (r.Next(0,2)==0) Inventory.Add(Item.Find("Leather Armor"));
+                    if (Stat("SharpShooting") >= 20)
                     {
                         switch (r.Next(0, 4))
                         {
                             case 0:
-                                Inventory.Add(new Item("Short Bow", 70, 9, "DEX\nAccuracy\ncSP -10\ntHP -10\nUses Arrow"));
-                                Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
+                                Inventory.Add(Item.Find("Short Bow"));
+                                Inventory.Add(Item.Find("Arrow"));
                                 break;
                             case 1:
-                                Inventory.Add(new Item("Long Bow", 80, 11, "DEX\nAccuracy\ncSP -12\ntHP -12\nUses Arrow"));
-                                Inventory.Add(new Item("Arrow", 1, 0.025, 20, "DEX\nShortBlade\ncSP -4\ntHP -4"));
+                                Inventory.Add(Item.Find("Long Bow"));
+                                Inventory.Add(Item.Find("Arrow"));
                                 break;
                             case 2:
-                                Inventory.Add(new Item("Hand Crossbow", 60, 7, "DEX\nAccuracy\ncSP -8\ntHP -8\nUses Bolt(Small)"));
-                                Inventory.Add(new Item("Bolt(Small)", 1, 0.23, 20, "DEX\nShortBlade\ncSP -3\ntHP -3"));
+                                Inventory.Add(Item.Find("Hand Crossbow"));
+                                Inventory.Add(Item.Find("Bolt(Small)"));
                                 break;
                             case 3:
-                                Inventory.Add(new Item("Crossbow", 90, 14, "DEX\nAccuracy\ncSP -14\ntHP -14\nUses Bolt(Medium)"));
-                                Inventory.Add(new Item("Bolt(Medium)", 1, 0.45, 20, "DEX\nShortBlade\ncSP -5\ntHP -5"));
+                                Inventory.Add(Item.Find("Crossbow"));
+                                Inventory.Add(Item.Find("Bolt(Medium)"));
                                 break;
                             default: break;
                         }
                     }
                     if (Stat("ShortBlade") >= 20)
                     {
-                        Inventory.Add(new Item("Dagger", 25, 2.5, "DEX\nShortBlade\ncSP -5\ntHP -5"));
-                    }
-                    if (Stat("Whip") >= 20)
-                    {
-                        Inventory.Add(new Item("Whip", 35, 4, "DEX\nWhip\ncSP -15\ntSP -12\ntWP -3"));
+                        Inventory.Add(Item.Find("Dagger"));
                     }
                     List<StatData> ThiefMagicList = new List<StatData> { CombatSkills[2], CombatSkills[3], CombatSkills[6], CombatSkills[7] };
                     List<StatData> ThiefMagicSortedList = ThiefMagicList.OrderByDescending(o => o.Value).ToList();
@@ -1563,9 +1565,9 @@ namespace Unnamed
                 default: break;
             }
             if (WeightMod > 1.0) {
-                if (maxCarryWeight - carryWeight + 15 >= 0) Inventory.Add(new Item("Small Backpack", 15, 3, "CW +15"));
-                else if (maxCarryWeight - carryWeight + 30 >= 0) Inventory.Add(new Item("Medium Backpack", 80, 3, "CW +30"));
-                else Inventory.Add(new Item("Large Backpack", 100, 3, "CW +45"));
+                if (maxCarryWeight - carryWeight + 15 >= 0) Inventory.Add(Item.Find("Small Backpack"));
+                else if (maxCarryWeight - carryWeight + 30 >= 0) Inventory.Add(Item.Find("Medium Backpack"));
+                else Inventory.Add(Item.Find("Large Backpack"));
             }
         }
 
@@ -1584,8 +1586,8 @@ namespace Unnamed
                     case "Hydrosophist":
                     case "Geomagnetic":
                         Class = "Wizard";
-                        if (sortedList[i + 1].Name == "Accuracy") Class = "Witch Hunter";
-                        else if (sortedList[i + 1].Name == "LongBlade") Class = "Witch Blade";
+                        if (sortedList[i + 1].Name == "SharpShooting") Class = "Witch Hunter";
+                        else if (sortedList[i + 1].Name == "Sword") Class = "Witch Blade";
                         break;
                     case "PowerOfLight":
                         Class = "Priest";
@@ -1594,8 +1596,8 @@ namespace Unnamed
                     case "ForceOfNature":
                         Class = "Druid";
                         break;
-                    case "LongBlade":
-                    case "BluntWeapon":
+                    case "Sword":
+                    case "Blunt":
                     case "Axe":
                         Class = "Warrior";
                         if (Stat("INT") < 10) Class = "Barbarian";
@@ -1606,7 +1608,7 @@ namespace Unnamed
                     case "Psionics":
                         Class = "Psionic";
                         break;
-                    case "Accuracy":
+                    case "SharpShooting":
                         Class = "Ranger";
                         break;
                     case "ShortBlade":
@@ -1635,9 +1637,6 @@ namespace Unnamed
                 else { LVL = 0; EXP = 0; }
             }
         }
-
-        public void AddItem(string name, int cost, double weight, string description) => Inventory.Add(new Item(name, cost, weight, description));
-
         public void RemoveItem(string name) => Inventory.Remove(Inventory.Where(x => x.Name == name).FirstOrDefault());
 
         public void ReplaceItem(Item oldItem, Item newItem)

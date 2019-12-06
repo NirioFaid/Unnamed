@@ -40,7 +40,7 @@ namespace Unnamed
         public string DmgType { get; set; }
         public string Descr { get; set; }
         public bool IsActive { get; set; } = true;
-        public string Summon { get; set; }
+        public string ConsumingItem { get; set; }
         public bool IsDrain { get; set; } = false;
 
         public Move()
@@ -113,8 +113,8 @@ namespace Unnamed
                     case "Drain":
                         IsDrain = true;
                         break;
-                    case "Summon":
-                        Summon = j[1];
+                    case "Uses":
+                        ConsumingItem = j[1];
                         break;
                     default:
                         break;
