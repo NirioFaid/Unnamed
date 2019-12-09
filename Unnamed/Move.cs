@@ -60,6 +60,7 @@ namespace Unnamed
             foreach (string i in modsList)
             {
                 string[] j = i.Split(' ');
+                if (j.Count() > 2) foreach (string s in j) { if (s == j[0] || s == j[1]) continue; else j[1] += " " + s; }
                 switch (j[0])
                 {
                     case "cSP":
@@ -115,6 +116,9 @@ namespace Unnamed
                         break;
                     case "Uses":
                         ConsumingItem = j[1];
+                        break;
+                    case "Consumable":
+                        ConsumingItem = Name;
                         break;
                     default:
                         break;

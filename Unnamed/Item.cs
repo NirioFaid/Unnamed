@@ -18,7 +18,7 @@ namespace Unnamed
 
         public string Name { get; set; }
         public int Cost { get; set; }
-        public double Weight { get; set; } = 0;
+        public double Weight { get; set; }
         public string Description { get; set; }
         public int Stack { get; set; } = 1;
         public string Type { get; set; }
@@ -101,16 +101,16 @@ namespace Unnamed
             new Item("Expert Robe", 2480, 2,"Robe", "MA +20\nMPR +10"),
             new Item("Master Robe", 4275, 2,"Robe", "MA +30\nMPR +15"),
 
-            new Item("Healing Potion", 25, 0.5, "Consumable",new Move("Healing potion", "END", "END", "cSP -10\ntHP +20\nConsumable", "", "10 SP, Heals *20* HP"), "10 SP, Heals *20* HP\nConsumable"),
-            new Item("Mana Potion", 25, 0.5, "Consumable",new Move("Mana potion", "INT", "INT", "cSP -10\ntMP +20\nConsumable", "", "10 SP, Restores *20* MP"), "10 SP, Restores *20* MP\nConsumable"),
-            new Item("Will Potion", 25, 0.5, "Consumable",new Move("Will potion", "WIS", "WIS", "cSP -10\ntWP +20\nConsumable", "", "10 SP, Restores *20* WP"), "10 SP, Restores *20* WP\nConsumable"),
-            new Item("Freeze Bomb", 55, 1,"Greenade",new Move("Freeze bomb", "DEX", "STR", "cSP -12\ntaSP -6\nConsumable", "Ice", "6 SP DMG to all enemies"), "Freezes enemies (-SP)\nConsumable"),
-            new Item("Charming Bomb", 135, 1,"Greenade",new Move("Charming bomb", "DEX", "STR", "cSP -12\ntaWP -6\nConsumable", "Psy", "6 WP DMG to all enemies"), "Charming enemies (-WP)\nConsumable"),
-            new Item("Alchemist's Fire", 155, 1,"Greenade",new Move("Alchemist's Fire", "DEX", "STR", "cSP -12\ntHP -6\ntaHP -6\nConsumable", "Fire", "6 HP Fire DMG to target and all enemies"), "Burning enemies (-HP)\nConsumable"),
+            new Item("Healing potion", 25, 0.5, "Consumable",new Move("Healing potion", "END", "END", "cSP -10\ncHP +20\nConsumable", "", "10 SP, Heals *20* HP"), "10 SP, Heals *20* HP\nConsumable"),
+            new Item("Mana potion", 25, 0.5, "Consumable",new Move("Mana potion", "INT", "INT", "cSP -10\ncMP +20\nConsumable", "", "10 SP, Restores *20* MP"), "10 SP, Restores *20* MP\nConsumable"),
+            new Item("Will potion", 25, 0.5, "Consumable",new Move("Will potion", "WIS", "WIS", "cSP -10\ncWP +20\nConsumable", "", "10 SP, Restores *20* WP"), "10 SP, Restores *20* WP\nConsumable"),
+            new Item("Freeze bomb", 55, 1,"Greenade",new Move("Freeze bomb", "DEX", "STR", "cSP -12\ntaSP -6\nConsumable", "Ice", "6 SP DMG to all enemies"), "Freezes enemies (-SP)\nConsumable"),
+            new Item("Charming bomb", 135, 1,"Greenade",new Move("Charming bomb", "DEX", "STR", "cSP -12\ntaWP -6\nConsumable", "Psy", "6 WP DMG to all enemies"), "Charming enemies (-WP)\nConsumable"),
+            new Item("Alchemist's fire", 155, 1,"Greenade",new Move("Alchemist's fire", "DEX", "STR", "cSP -12\ntHP -6\ntaHP -6\nConsumable", "Fire", "6 HP Fire DMG to target and all enemies"), "Burning enemies (-HP)\nConsumable"),
             new Item("Storm bomb", 55, 1,"Greenade",new Move("Storm bomb", "DEX", "STR", "cSP -12\ntaHP -3\ntaMP -3\nConsumable", "Storm", "3 HP & MP Storm DMG to all enemies"), "Electrifies enemies (-HP&MP)\nConsumable"),
-            new Item("Rock Bomb", 55, 1,"Greenade",new Move("Rock Bomb", "DEX", "STR", "cSP -12\ntHP -6\ntaHP -6\nConsumable", "Rock", "6 HP Rock DMG to target and all enemies"), "Rocks to enemies (-HP)\nConsumable"),
-            new Item("Poison Bomb", 55, 1,"Greenade",new Move("Poison Bomb", "DEX", "STR", "cSP -12\ntaHP -3\ntaSP -1\ntaWP -2\nConsumable", "Poison", "3 HP, 2 WP & 1 SP Poison DMG to all enemies"), "Poison enemies\nConsumable"),
-            new Item("Void Bomb", 55, 1,"Greenade",new Move("Void Bomb", "DEX", "STR", "cSP -16\ncaHP -6\ntaHP -10\ntaWP -2\nConsumable", "Void", "Deals damage to everyone, especially enemies"), "Mess everything with void bomb\nConsumable"),
+            new Item("Rock bomb", 55, 1,"Greenade",new Move("Rock bomb", "DEX", "STR", "cSP -12\ntHP -6\ntaHP -6\nConsumable", "Rock", "6 HP Rock DMG to target and all enemies"), "Rocks to enemies (-HP)\nConsumable"),
+            new Item("Poison bomb", 55, 1,"Greenade",new Move("Poison bomb", "DEX", "STR", "cSP -12\ntaHP -3\ntaSP -1\ntaWP -2\nConsumable", "Poison", "3 HP, 2 WP & 1 SP Poison DMG to all enemies"), "Poison enemies\nConsumable"),
+            new Item("Void bomb", 55, 1,"Greenade",new Move("Void bomb", "DEX", "STR", "cSP -16\ncaHP -6\ntaHP -10\ntaWP -2\nConsumable", "Void", "Deals damage to everyone, especially enemies"), "Mess everything with void bomb\nConsumable"),
 
             new Item("Padded Armor", 45, 3,"Armor", "PA +4"),
             new Item("Leather Armor", 75, 5,"Armor", "PA +8"),

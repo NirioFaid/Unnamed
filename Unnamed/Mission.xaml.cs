@@ -295,6 +295,7 @@ namespace Unnamed
                 else if (isAlly) { SelectedAlly.Inventory.Remove(BufItem); allyItems.Items.Refresh(); }
                 else if (!isAlly) { SelectedEnemy.Inventory.Remove(BufItem); enemyItems.Items.Refresh(); }
             }
+            else if (selMove.ConsumingItem != null) { UnselectMoves(); return; }
             /*if (BufCraftItem != null)
             {
                 caster.Inventory.Add(BufCraftItem);

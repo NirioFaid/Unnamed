@@ -19,7 +19,7 @@ namespace Unnamed
             Item.Find("Greatsword"),
             Item.Find("Battleaxe"),
             Item.Find("Warhammer"),
-            Item.Find("Katana"),
+            Item.Find("Katana")
             //Item.Find("Combat Oil Umbrella"),
         };
 
@@ -37,7 +37,7 @@ namespace Unnamed
             Item.Find("Tessen"),
             Item.Find("Shuriken"),
             Item.Find("Knife"),
-            Item.Find("Kunai"),
+            Item.Find("Kunai")
         };
 
         List<Item> magicShop = new List<Item> {
@@ -47,20 +47,20 @@ namespace Unnamed
             Item.Find("Apprentice Robe"),
             Item.Find("Adept Robe"),
             Item.Find("Expert Robe"),
-            Item.Find("Master Robe"),
+            Item.Find("Master Robe")
         };
 
         List<Item> alchemistsShop = new List<Item> {
-            Item.Find("Healing Potion"),
-            Item.Find("Mana Potion"),
-            Item.Find("Will Potion"),
-            Item.Find("Freeze Bomb"),
-            Item.Find("Charming Bomb"),
-            Item.Find("Alchemist's Fire"),
+            Item.Find("Healing potion"),
+            Item.Find("Mana potion"),
+            Item.Find("Will potion"),
+            Item.Find("Freeze bomb"),
+            Item.Find("Charming bomb"),
+            Item.Find("Alchemist's fire"),
             Item.Find("Storm bomb"),
-            Item.Find("Rock Bomb"),
-            Item.Find("Poison Bomb"),
-            Item.Find("Void Bomb"),
+            Item.Find("Rock bomb"),
+            Item.Find("Poison bomb"),
+            Item.Find("Void bomb")
         };
 
         List<Item> armorShop = new List<Item> {
@@ -84,7 +84,7 @@ namespace Unnamed
             Item.Find("Large Backpack"),
             Item.Find("Spacious Backpack"),
             Item.Find("Advanced Backpack"),
-            Item.Find("Camping Supplies"),
+            Item.Find("Camping Supplies")
         };
 
         List<Item> blackMarket = new List<Item> {
@@ -92,7 +92,7 @@ namespace Unnamed
             Item.Find("Chillrend"),
             Item.Find("Benizakura"),
             Item.Find("Dawnbreaker"),
-            Item.Find("Healing stone"),
+            Item.Find("Healing stone")
         };
 
         List<Item> activeList = new List<Item> { };
