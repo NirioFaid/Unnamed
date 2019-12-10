@@ -855,8 +855,10 @@ namespace Unnamed
          * 1) Запилить систему инвентаря/экипировки
          * 2) Улучшить систему генерации персонажей/умений и т.п.
          * 3) Лаборатория, биомасса и т.п.
-         * 4) Убрать уровни, классы, общую экспу и т.п.
+         * 4) Ребаланс мувов и геймплея боев в целом
          * 5) Улучшить систему прокачки навыков
+         * 6) Возможность заряжать атаки оружием магией разных типов и не только (переключ. пассивки)
+         * 7) Улучшить систему именования классов
          * */
 
         public void generateUnitData()
@@ -867,15 +869,6 @@ namespace Unnamed
             Attributes.Add(new StatData("INT", RollAttr()));
             Attributes.Add(new StatData("WIS", RollAttr()));
             Attributes.Add(new StatData("CHR", RollAttr()));
-
-            {
-                int balanceRate = Attributes.Sum(x => x.Value);
-                if (balanceRate < 60) LVL = 1;
-                else if (balanceRate < 80) LVL = 2;
-                else if (balanceRate < 95) LVL = 3;
-                else if (balanceRate < 110) LVL = 4;
-                else LVL = 5;
-            }
 
             Coins = r.Next(0, Cost / 2);
             if (Race == null) GenerateRace();
@@ -892,8 +885,10 @@ namespace Unnamed
                 default: break;
             }
             HP = maxHP; MP = maxMP; WP = maxWP;
-            //CombatSkills = CombatSkills.OrderBy(o => o.Value).ToList();
-            //CombatSkills.RemoveRange(0, r.Next(11, 15));
+            {
+                int balanceRate = CombatSkills.Sum(x => x.Value);
+                LVL = (balanceRate - (int)(CombatSkills[CombatSkills.Count-1].Value*0.5)) / 10;
+            }
             GenerateCodename();
             GenerateAvatar();
         }
@@ -935,7 +930,7 @@ namespace Unnamed
             CombatSkills.AddRange(STRSkills); CombatSkills.AddRange(DEXSkills); CombatSkills.AddRange(WISSkills); CombatSkills.AddRange(INTSkills);
             CombatSkills = CombatSkills.OrderByDescending(o => o.Value).ToList();
             while (CombatSkills.Count > 4) CombatSkills.RemoveAt(CombatSkills.Count-1);
-            while (CombatSkills.Count > 1+Stat("INT")/9 && (CombatSkills[CombatSkills.Count - 1].Value<50||r.Next(0,3)!=0)) CombatSkills.RemoveAt(CombatSkills.Count-1);
+            while (CombatSkills.Count > 1 && (CombatSkills[CombatSkills.Count - 1].Value<50||r.Next(0,3)!=0)) CombatSkills.RemoveAt(CombatSkills.Count-1);
         }
 
         public int Stat(string name)
@@ -1092,7 +1087,7 @@ namespace Unnamed
                     if (CombatSkills[0].Value <= 25) Inventory.Add(Item.Find("Novice Robe"));
                     else if (CombatSkills[0].Value < 50) Inventory.Add(Item.Find("Apprentice Robe"));
                     else if (CombatSkills[0].Value < 70) Inventory.Add(Item.Find("Adept Robe"));
-                    if (r.Next(0,2) == 0 && CombatSkills[0].Value >= 50 && CombatSkills[1].Value >= 50) {
+                    if (CombatSkills.Count > 1 && r.Next(0,2) == 0 && CombatSkills[0].Value >= 50 && CombatSkills[1].Value >= 50) {
                         Subclass = "Elementalist";
                         if (Stat("ShortBlade") >= 40)
                         {

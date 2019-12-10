@@ -170,7 +170,7 @@ namespace Unnamed
             new Move("Impalement", "INT", "Geomagnetic", "cSP -15\ncMP -15\ntaHP -6\ntaSP -4", "Rock", "15 SP / 15 MP\nImpale enemies with stone peaks!"),
 
             //new Move("Dazzling Light", "WIS\nPowerOfLight\ncMP -10\ntHP -5\ntSP -5\nLight"),
-            new Move("Dazzling Light", "WIS", "PowerOfLight", "cSP -6\ncMP -4\ntHP -5\ntSP -5", "Light", "6 SP / 4 MP\nBlind and burn enemy with the Power Of Light!"),
+            new Move("Dazzling Light", "WIS", "PowerOfLight", "cSP -6\ncMP -4\ntHP -6\ntSP -2\ntWP -2", "Light", "6 SP / 4 MP\nBlind and burn enemy with the Power Of Light!"),
             //new Move("Small Heal", "WIS\nPowerOfLight\ncMP -5\ncHP +5\nLight"),
             new Move("Healing Light", "WIS", "PowerOfLight", "cSP -3\ncMP -3\ncHP +6", "Light", "3 SP / 3 MP\nRestores *6* HP"),
             //new Move("Mass Heal", "WIS\nPowerOfLight\ncMP -15\ncaHP +5\nLight"),
